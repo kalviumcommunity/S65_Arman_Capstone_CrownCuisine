@@ -1,16 +1,8 @@
-<div align="center">
-    <br>
-    <img src="./client/public/crown-cuisine.png" alt="Crown Cuisine Logo" width="120" />
-    <br>
-</div>
-
 # Crown Cuisine
 
 Crown Cuisine is a comprehensive restaurant management application designed to streamline operations and enhance customer experiences. This platform integrates various functionalities to help restaurants manage their inventory, reservations, staff, digital menus, and payment processing.
 
 ---
-
-## Restaurant Management App Features
 
 ### Advanced Inventory Management
 - **Real-time tracking of ingredients -** Automatically monitor stock levels with reorder alerts.
