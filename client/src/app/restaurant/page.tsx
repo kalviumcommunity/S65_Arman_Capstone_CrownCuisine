@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -93,7 +92,7 @@ const mockRestaurantData: RestaurantData = {
   name: "Haveli Eastwood",
   description:
     "Experience the rich flavors of Punjab in a setting that transports you to a traditional village. Enjoy live folk music every evening while savoring authentic dishes prepared with age-old recipes and the freshest local ingredients.",
-  imageUrl: "", // Intentionally left blank as in the original code
+  imageUrl: "",
   rating: 4.7,
   cuisine: "Punjabi",
   location: "GT Road, Near Amritsar Bypass",
@@ -211,7 +210,6 @@ export default function RestaurantPage() {
       alert("Please fill in all booking details.");
       return;
     }
-    // Format date for logging/alert if it exists
     const formattedDate = bookingDate ? format(bookingDate, "PPP") : "N/A";
     console.log("Booking Details:", {
       date: formattedDate,
@@ -247,12 +245,10 @@ export default function RestaurantPage() {
             item.id === itemId
               ? {
                   ...item,
-                  // Ensure quantity doesn't go below 0 before filtering
                   quantity: Math.max(0, item.quantity + change),
                 }
               : item
           )
-          // Filter out items where quantity is 0 *after* mapping
           .filter((item) => item.quantity > 0)
       );
     });
@@ -275,8 +271,6 @@ export default function RestaurantPage() {
     console.log("Proceeding to Checkout with:", cart);
     console.log("Total Amount:", total);
     alert(`Proceeding to checkout. Total: ₹${total.toFixed(2)}`);
-    // Clear cart after checkout simulation
-    // setCart([]); // Optional: Uncomment to clear cart
   };
 
   const renderRating = (rating: number) => (
@@ -288,67 +282,50 @@ export default function RestaurantPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Updated header */}
-      <div className="relative overflow-hidden bg-black w-full">
-        <div className="container relative z-10 mx-auto px-4 pb-16 pt-20 text-center md:pb-24 md:pt-28 lg:pt-32">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            {restaurant.name}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 md:text-xl">
-            Experience authentic {restaurant.cuisine} cuisine in a memorable
-            setting
-          </p>
+    <div className="min-h-screen bg-stone-200">
+      <div className="relative overflow-hidden bg-stone-200">
+        <div className="container relative z-10 mx-auto px-6 py-16 md:py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-black tracking-tight">
+              <span className="italic">{restaurant.name}</span>
+            </h1>
+            <p className="mt-6 text-lg text-black/80 font-serif max-w-2xl mx-auto">
+              Experience authentic {restaurant.cuisine} cuisine in a memorable setting.
+              Savor the flavors while enjoying the warm ambiance of our restaurant.
+            </p>
+          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {/* --- Column 1: Restaurant Info & Booking --- */}
           <div className="md:col-span-1 space-y-6">
-            {/* --- START: Restaurant Description Card Changes --- */}
-            <Card className="overflow-hidden shadow-md">
-              {" "}
-              {/* Removed p-2, added shadow-md */}
+            <Card className="overflow-hidden shadow-md border border-stone-300">
               <CardHeader className="p-6 pb-4">
-                {" "}
-                {/* Added p-6, adjusted pb */}
                 <div className="flex items-start gap-4">
-                  {" "}
-                  {/* Adjusted gap slightly */}
-                  {/* Restaurant Logo Area */}
                   <div className="h-20 w-20 rounded-md border bg-muted flex-shrink-0 flex items-center justify-center overflow-hidden">
-                    {" "}
-                    {/* Slightly smaller logo area */}
                     {restaurant.imageUrl ? (
                       <Image
                         src={restaurant.imageUrl}
                         alt={`${restaurant.name} logo`}
-                        width={80} // Match container
-                        height={80} // Match container
+                        width={80}
+                        height={80}
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <Utensils className="h-10 w-10 text-muted-foreground/40" /> // Slightly smaller icon
+                      <Utensils className="h-10 w-10 text-muted-foreground/40" />
                     )}
                   </div>
-                  {/* Restaurant Details */}
                   <div className="flex-1 space-y-1.5">
-                    {" "}
-                    {/* Added space-y */}
-                    {/* Moved Title here for better flow */}
                     <h3 className="text-xl font-semibold leading-tight">
-                      {" "}
-                      {/* Larger Title */}
                       {restaurant.name}
                     </h3>
                     <div className="flex items-center justify-between gap-4">
                       <Badge
                         variant="secondary"
-                        className="text-xs px-2 py-0.5" // Smaller badge text/padding
+                        className="text-xs px-2 py-0.5"
                       >
-                        <Utensils className="mr-1 h-3 w-3" />{" "}
-                        {/* Smaller icon */}
+                        <Utensils className="mr-1 h-3 w-3" />
                         {restaurant.cuisine}
                       </Badge>
                       {renderRating(restaurant.rating)}
@@ -357,34 +334,21 @@ export default function RestaurantPage() {
                 </div>
               </CardHeader>
               <CardContent className="p-6 pt-0 space-y-4">
-                {" "}
-                {/* Added p-6 pt-0, added space-y */}
-                {/* Moved Description Here */}
                 <CardDescription className="text-base text-muted-foreground text-justify leading-relaxed">
-                  {" "}
-                  {/* Use muted-foreground for standard description color */}
                   {restaurant.description}
                 </CardDescription>
-                {/* Location */}
                 <div className="flex items-center text-muted-foreground text-sm border-t pt-4">
-                  {" "}
-                  {/* Added border-t and pt-4 */}
                   <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span>{restaurant.location}</span>
                 </div>
               </CardContent>
             </Card>
-            {/* --- END: Restaurant Description Card Changes --- */}
 
-            {/* --- Booking Card (Existing structure) --- */}
-            <Card className="overflow-hidden border shadow-md w-full max-w-md mx-auto">
+            <Card className="overflow-hidden border border-stone-300 shadow-md w-full max-w-md mx-auto">
               <CardHeader className="p-6 pb-4">
-                {" "}
-                {/* Consistent Padding */}
                 <CardTitle className="text-xl">
                   Reserve Your Table
-                </CardTitle>{" "}
-                {/* Adjusted size */}
+                </CardTitle>
                 <CardDescription>
                   Experience an unforgettable dining moment
                 </CardDescription>
@@ -392,9 +356,7 @@ export default function RestaurantPage() {
 
               <form onSubmit={handleBooking}>
                 <CardContent className="space-y-6 p-6">
-                  {/* Grid for Date and Time */}
                   <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
-                    {/* Date Picker Section */}
                     <div className="space-y-2">
                       <Label
                         htmlFor="booking-date-trigger"
@@ -424,7 +386,6 @@ export default function RestaurantPage() {
                             mode="single"
                             selected={bookingDate}
                             onSelect={setBookingDate}
-                            // Disable past dates, including today
                             disabled={(date) =>
                               date < new Date(new Date().setHours(0, 0, 0, 0))
                             }
@@ -434,7 +395,6 @@ export default function RestaurantPage() {
                       </Popover>
                     </div>
 
-                    {/* Time Picker Section */}
                     <div className="space-y-2">
                       <Label
                         htmlFor="booking-time-trigger"
@@ -456,26 +416,22 @@ export default function RestaurantPage() {
                           </div>
                         </SelectTrigger>
                         <SelectContent className="max-h-72">
-                          {/* Lunch Times */}
                           <SelectGroup>
                             <SelectLabel>Lunch</SelectLabel>
                             <SelectItem value="12:00 PM">
                               12:00 PM
-                            </SelectItem>{" "}
-                            {/* Use display value */}
+                            </SelectItem>
                             <SelectItem value="12:30 PM">12:30 PM</SelectItem>
                             <SelectItem value="1:00 PM">1:00 PM</SelectItem>
                             <SelectItem value="1:30 PM">1:30 PM</SelectItem>
                             <SelectItem value="2:00 PM">2:00 PM</SelectItem>
                             <SelectItem value="2:30 PM">2:30 PM</SelectItem>
                           </SelectGroup>
-                          {/* Dinner Times */}
                           <SelectGroup>
                             <SelectLabel>Dinner</SelectLabel>
                             <SelectItem value="6:00 PM">
                               6:00 PM
-                            </SelectItem>{" "}
-                            {/* Use display value */}
+                            </SelectItem>
                             <SelectItem value="6:30 PM">6:30 PM</SelectItem>
                             <SelectItem value="7:00 PM">7:00 PM</SelectItem>
                             <SelectItem value="7:30 PM">7:30 PM</SelectItem>
@@ -488,7 +444,6 @@ export default function RestaurantPage() {
                     </div>
                   </div>
 
-                  {/* Party Size Section */}
                   <div className="space-y-2">
                     <Label htmlFor="party-size" className="font-medium">
                       Please select the number of guests
@@ -525,7 +480,6 @@ export default function RestaurantPage() {
                         size="icon"
                         className="h-11 w-11 rounded-full flex-shrink-0"
                         onClick={() => setPartySize(partySize + 1)}
-                        // disabled={partySize >= 20} // Example max limit
                       >
                         <Plus className="h-4 w-4" />
                         <span className="sr-only">Increase guest count</span>
@@ -547,48 +501,34 @@ export default function RestaurantPage() {
             </Card>
           </div>
 
-          {/* --- Column 2: Menu --- */}
           <div className="md:col-span-2">
             <h2 className="text-3xl font-semibold tracking-tight mb-6">
-              {" "}
-              {/* Larger heading, more margin */}
               Menu
             </h2>
             <Accordion type="multiple" className="w-full space-y-3">
-              {" "}
-              {/* Increased space-y */}
               {restaurant.menu.categories.map((category) => (
                 <AccordionItem
                   key={category.id}
                   value={category.id}
-                  className="border rounded-lg bg-card shadow-sm" // Added shadow-sm
+                  className="border rounded-lg bg-card shadow-sm border-stone-300"
                 >
                   <AccordionTrigger className="px-6 py-4 text-lg font-medium hover:no-underline">
-                    {" "}
-                    {/* Adjusted padding */}
                     {category.name}
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pt-0 pb-4">
-                    {" "}
-                    {/* Adjusted padding */}
                     <div className="space-y-4 divide-y divide-border/40">
-                      {" "}
-                      {/* Added divider */}
                       {category.items.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between gap-4 pt-4 first:pt-0" // Adjusted padding/borders
+                          className="flex items-center justify-between gap-4 pt-4 first:pt-0"
                         >
                           <div className="flex-grow">
                             <h4 className="font-semibold">{item.name}</h4>
                             <p className="text-sm text-muted-foreground mt-0.5">
-                              {" "}
-                              {/* Added margin-top */}
                               {item.description}
                             </p>
                             <p className="text-sm font-medium mt-1.5">
-                              {" "}
-                              {/* Added margin-top */}₹{item.price.toFixed(2)}
+                              ₹{item.price.toFixed(2)}
                             </p>
                           </div>
                           <Button
@@ -596,10 +536,9 @@ export default function RestaurantPage() {
                             size="sm"
                             onClick={() => handleAddToOrder(item)}
                             aria-label={`Add ${item.name} to order`}
-                            className="flex-shrink-0" // Prevent shrinking
+                            className="flex-shrink-0"
                           >
-                            <Plus className="h-4 w-4 mr-1.5" />{" "}
-                            {/* Adjusted margin */}
+                            <Plus className="h-4 w-4 mr-1.5" />
                             Add
                           </Button>
                         </div>
@@ -613,7 +552,6 @@ export default function RestaurantPage() {
         </div>
       </div>
 
-      {/* --- Cart Sheet (Using Redesigned Version) --- */}
       <Sheet>
         <SheetTrigger asChild>
           <Button
@@ -635,8 +573,6 @@ export default function RestaurantPage() {
         </SheetTrigger>
 
         <SheetContent className="flex h-full flex-col sm:max-w-lg w-[90vw] sm:w-full">
-          {" "}
-          {/* Added width control */}
           <SheetHeader className="px-6 pt-6 pb-4">
             <SheetTitle className="text-xl font-semibold">
               Your Order
@@ -669,12 +605,10 @@ export default function RestaurantPage() {
                     key={item.id}
                     className="flex items-start justify-between gap-4 border-b border-border/50 pb-4 last:border-b-0 last:pb-0"
                   >
-                    {/* Optional: Item Image Placeholder */}
                     <div className="h-16 w-16 rounded-md bg-muted flex items-center justify-center flex-shrink-0 border">
                       <Package className="h-8 w-8 text-muted-foreground/50" />
                     </div>
 
-                    {/* Item Details & Quantity */}
                     <div className="flex flex-col flex-grow gap-1">
                       <h4 className="font-medium text-sm leading-tight">
                         {item.name}
@@ -682,7 +616,6 @@ export default function RestaurantPage() {
                       <p className="text-xs text-muted-foreground">
                         Price: ₹{item.price.toFixed(2)}
                       </p>
-                      {/* Quantity Controls */}
                       <div className="flex items-center gap-2 mt-1.5">
                         <Button
                           variant="outline"
@@ -690,7 +623,6 @@ export default function RestaurantPage() {
                           className="h-7 w-7"
                           onClick={() => handleUpdateQuantity(item.id, -1)}
                           aria-label="Decrease quantity"
-                          // Disable remove button logic moved to filter in handleUpdateQuantity
                         >
                           <Minus className="h-3.5 w-3.5" />
                         </Button>
@@ -709,17 +641,15 @@ export default function RestaurantPage() {
                       </div>
                     </div>
 
-                    {/* Item Total & Remove Button */}
                     <div className="flex flex-col items-end justify-between h-full flex-shrink-0 ml-auto pl-2">
                       <p className="font-semibold text-sm">
                         ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
-                      {/* Remove button logic changed to use quantity update */}
                       <Button
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => handleRemoveFromCart(item.id)} // Direct remove instead
+                        onClick={() => handleRemoveFromCart(item.id)}
                         aria-label="Remove item completely"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -730,7 +660,6 @@ export default function RestaurantPage() {
               </div>
             </div>
           )}
-          {/* Footer - Only shown if cart has items */}
           {cart.length > 0 && (
             <>
               <Separator />
@@ -740,7 +669,6 @@ export default function RestaurantPage() {
                     <span>Subtotal:</span>
                     <span>₹{calculateCartTotal().toFixed(2)}</span>
                   </div>
-                  {/* Add other potential elements like Discounts or Taxes here if needed */}
                   <Button size="lg" className="w-full" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
