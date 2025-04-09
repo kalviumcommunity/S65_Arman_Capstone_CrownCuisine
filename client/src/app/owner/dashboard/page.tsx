@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,14 +32,11 @@ import {
   Boxes,
   UsersRound,
   Construction,
-  PlusCircle,
   Edit,
   ExternalLink,
   Calendar,
   Clock,
   Users,
-  CheckCircle2,
-  Circle,
   Trash2,
   Utensils,
 } from "lucide-react";
@@ -69,7 +65,7 @@ const mockBookingsData: Booking[] = [
   {
     id: "b1",
     customerName: "Rohan Sharma",
-    date: "2025-04-05",
+    date: "2025-04-10",
     time: "19:00",
     partySize: 2,
     status: "Confirmed",
@@ -78,7 +74,7 @@ const mockBookingsData: Booking[] = [
   {
     id: "b2",
     customerName: "Priya Kaur",
-    date: "2025-04-05",
+    date: "2025-04-10",
     time: "20:30",
     partySize: 4,
     status: "Confirmed",
@@ -87,7 +83,7 @@ const mockBookingsData: Booking[] = [
   {
     id: "b3",
     customerName: "Amit Singh",
-    date: "2025-04-06",
+    date: "2025-04-11",
     time: "18:30",
     partySize: 3,
     status: "Confirmed",
@@ -95,7 +91,7 @@ const mockBookingsData: Booking[] = [
   {
     id: "b6",
     customerName: "Geeta Verma",
-    date: "2025-04-06",
+    date: "2025-04-11",
     time: "19:30",
     partySize: 2,
     status: "Confirmed",
@@ -141,29 +137,25 @@ const mockMenuItemsData: MenuItem[] = [
 ];
 
 const BookingStatusBadge = ({ status }: { status: BookingStatus }) => {
-  const isConfirmed = status === "Confirmed";
-  const isPending = status === "Pending";
-  const variant: "default" | "outline" | "secondary" | "destructive" =
-    status === "Confirmed"
-      ? "default"
-      : status === "Pending"
-        ? "outline"
-        : status === "Cancelled"
-          ? "destructive"
-          : status === "Completed"
-            ? "secondary"
-            : "default";
+  let badgeColor = "bg-stone-100 text-stone-600";
+  let textColor = "text-stone-600";
+
+  if (status === "Confirmed") {
+    badgeColor = "bg-green-100 text-green-700";
+    textColor = "text-green-700";
+  } else if (status === "Pending") {
+    badgeColor = "bg-yellow-100 text-yellow-700";
+    textColor = "text-yellow-700";
+  } else if (status === "Cancelled") {
+    badgeColor = "bg-red-100 text-red-700";
+    textColor = "text-red-700";
+  } else if (status === "Completed") {
+    badgeColor = "bg-stone-100 text-stone-600";
+    textColor = "text-stone-600";
+  }
 
   return (
-    <Badge
-      variant={variant}
-      className="capitalize text-xs whitespace-nowrap px-2 py-0.5"
-    >
-      {isConfirmed ? (
-        <CheckCircle2 className="mr-1 h-3 w-3" />
-      ) : isPending ? (
-        <Circle className="mr-1 h-3 w-3" />
-      ) : null}
+    <Badge className={`capitalize ${badgeColor} ${textColor} border-none`}>
       {status}
     </Badge>
   );
@@ -190,6 +182,15 @@ export default function OwnerDashboardPage() {
     console.log(
       "ACTION: Trigger Add New Menu Item (e.g., open modal/navigate)"
     );
+    const newItem: MenuItem = {
+      id: `m${Date.now()}`,
+      name: "New Item",
+      price: 0,
+      category: "Uncategorized",
+      description: "",
+    };
+    setMenuItems((prev) => [...prev, newItem]);
+    console.log("ACTION: Trigger Edit Menu Item for ID:", newItem.id);
   };
 
   const handleEditMenuItem = (itemId: string) => {
@@ -219,7 +220,6 @@ export default function OwnerDashboardPage() {
 
   const formatDate = (dateInput: string | Date): string => {
     try {
-      // Ensure date is treated correctly regardless of input type
       const date =
         typeof dateInput === "string"
           ? new Date(dateInput + "T00:00:00")
@@ -227,7 +227,7 @@ export default function OwnerDashboardPage() {
       return date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
-        // year: "numeric" // Add year if needed for clarity
+        year: "numeric",
       });
     } catch (e) {
       console.error("Invalid date format:", dateInput);
@@ -236,72 +236,62 @@ export default function OwnerDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Header Section - Updated to match other banners */}
-      <div className="relative overflow-hidden bg-black w-full">
-        <div className="container relative z-10 mx-auto px-4 pb-16 pt-20 text-center md:pb-24 md:pt-28 lg:pt-32">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            Owner Dashboard
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 md:text-xl">
-            Manage bookings, menus, and operations for your restaurant
-            efficiently.
-          </p>
+    <div className="min-h-screen bg-stone-200">
+      <div className="relative overflow-hidden bg-stone-200">
+        <div className="container relative z-10 mx-auto px-6 py-16 md:py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-black tracking-tight">
+              Afternoon, <span className="italic">Arman</span>
+            </h1>
+            <p className="mt-6 text-lg text-black/80 font-serif max-w-2xl mx-auto">
+              Streamline your restaurant&apos;s day-to-day, from managing menus
+              and tracking reservations to optimizing staff and service, all in
+              one place.
+            </p>
+          </div>
         </div>
       </div>
-      {/* Main Content Area */}
+
       <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
-        {/* Core Management Section Header */}
-        <div className="mb-8 border-b pb-4">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground">
+        <div className="mb-8 border-b border-stone-200 pb-4">
+          <h2 className="text-3xl font-semibold tracking-tight text-black">
             Core Management
           </h2>
-          <p className="mt-2 text-base text-muted-foreground">
+          <p className="mt-2 text-base text-stone-600">
             Manage your primary operations: Bookings and Menu.
           </p>
         </div>
-        {/* Core Management Grid */}
-        {/* The grid layout automatically handles column alignment.
-                    Adding `h-full` to the Card components tells them to fill the height
-                    of their grid cell. We also use `flex flex-col` inside the cards
-                    and `flex-grow` on the content areas to push footers down. */}
+
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 items-stretch">
-          {" "}
-          {/* Added items-stretch */}
-          {/* Upcoming Bookings Card */}
-          {/* Added `h-full` and `flex flex-col` */}
-          <Card className="h-full flex flex-col border bg-card text-card-foreground shadow-sm">
+          <Card className="h-full flex flex-col border border-stone-300 bg-white shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <div className="space-y-1">
-                <CardTitle className="text-lg font-medium">
+                <CardTitle className="text-lg font-medium text-black">
                   Upcoming Bookings
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-stone-600">
                   Next {MAX_PREVIEW_BOOKINGS} pending/confirmed reservations.
                 </CardDescription>
               </div>
-              <CalendarCheck className="h-5 w-5 text-muted-foreground" />
+              <CalendarCheck className="h-5 w-5 text-stone-500" />
             </CardHeader>
-            {/* Added `flex-grow` to allow content area to expand */}
             <CardContent className="p-0 flex-grow">
               <div className="space-y-3 p-6 pt-2 h-full">
-                {" "}
-                {/* Ensure inner div takes space */}
                 {upcomingBookingsPreview.length > 0 ? (
                   upcomingBookingsPreview.map((booking) => (
                     <Card
                       key={booking.id}
-                      className="border shadow-sm transition-all hover:shadow-md hover:border-primary/30 bg-card overflow-hidden"
+                      className="border border-stone-200 shadow-sm transition-all hover:shadow-md hover:border-stone-400 bg-white overflow-hidden"
                     >
                       <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-x-4 gap-y-3">
                         <div className="flex-grow space-y-1.5 min-w-0">
                           <p
-                            className="font-semibold text-base text-card-foreground truncate"
+                            className="font-semibold text-base text-black truncate"
                             title={booking.customerName}
                           >
                             {booking.customerName}
                           </p>
-                          <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-sm text-muted-foreground">
+                          <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-sm text-stone-600">
                             <span className="flex items-center gap-1 whitespace-nowrap">
                               <Calendar className="h-3.5 w-3.5" />
                               {formatDate(booking.date)}
@@ -318,80 +308,74 @@ export default function OwnerDashboardPage() {
                         </div>
                         <div className="flex items-center gap-3 flex-shrink-0 pt-1 sm:pt-0 self-start sm:self-center">
                           <BookingStatusBadge status={booking.status} />
-                          <div className="flex items-center space-x-2">
-                            <Label
-                              htmlFor={`status-toggle-${booking.id}`}
-                              className="sr-only"
-                            >
-                              {booking.status === "Confirmed"
-                                ? "Mark as Pending"
-                                : "Mark as Confirmed"}
-                            </Label>
-                            <Switch
-                              id={`status-toggle-${booking.id}`}
-                              checked={booking.status === "Confirmed"}
-                              onCheckedChange={(isChecked) =>
-                                handleToggleBookingStatus(
-                                  booking.id,
-                                  isChecked ? "Confirmed" : "Pending"
-                                )
-                              }
-                              aria-label={`Toggle booking status for ${booking.customerName}`}
-                              disabled={
-                                booking.status !== "Pending" &&
-                                booking.status !== "Confirmed"
-                              }
-                            />
-                          </div>
+                          <Switch
+                            id={`status-toggle-${booking.id}`}
+                            checked={booking.status === "Confirmed"}
+                            onCheckedChange={(isChecked) =>
+                              handleToggleBookingStatus(
+                                booking.id,
+                                isChecked ? "Confirmed" : "Pending"
+                              )
+                            }
+                            aria-label={`Toggle booking status for ${booking.customerName}`}
+                            disabled={
+                              booking.status !== "Pending" &&
+                              booking.status !== "Confirmed"
+                            }
+                          />
                         </div>
                       </CardContent>
                     </Card>
                   ))
                 ) : (
                   <div className="h-full flex items-center justify-center">
-                    {" "}
-                    {/* Center placeholder text */}
-                    <p className="text-center text-muted-foreground px-6">
+                    <p className="text-center text-stone-500 px-6">
                       No upcoming bookings found.
                     </p>
                   </div>
                 )}
               </div>
             </CardContent>
-            {/* Footer remains at the bottom */}
-            <CardFooter className="border-t px-6 py-3 bg-muted/30 flex justify-center">
+            <CardFooter className="border-t border-stone-300 px-6 py-3 bg-stone-50 flex justify-center">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-primary hover:bg-primary/10 h-8 px-3"
+                className="text-black hover:bg-black/10 h-8 px-3"
               >
                 View All Bookings
                 <ExternalLink className="ml-1.5 h-4 w-4" />
               </Button>
             </CardFooter>
           </Card>
-          {/* Menu Management Card */}
-          {/* Kept `flex flex-col`, added `h-full` */}
-          <Card className="h-full flex flex-col border bg-card shadow-sm">
+
+          <Card className="h-full flex flex-col border border-stone-300 bg-white shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <div className="space-y-1">
-                <CardTitle className="text-xl font-semibold">
+                <CardTitle className="text-xl font-semibold text-black">
                   Menu Management
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-stone-600">
                   Preview, add, edit, or delete menu items.
                 </CardDescription>
               </div>
-              <BookOpenText className="h-6 w-6 text-primary" />
+              <BookOpenText className="h-6 w-6 text-black" />
             </CardHeader>
-            {/* Added `flex-grow` to allow content area to expand */}
             <CardContent className="p-0 flex-grow">
-              <div className="space-y-3 p-6 pt-2 h-full">
+              <div className="px-6 pt-4">
+                <Button
+                  size="sm"
+                  className="w-full bg-black text-white hover:bg-stone-800"
+                  onClick={handleAddNewMenuItem}
+                >
+                  Add New Menu Item
+                </Button>
+              </div>
+              <div className="space-y-3 p-6 pt-4 h-full">
                 {menuItemsPreview.length > 0 ? (
                   menuItemsPreview.map((item) => (
                     <Card
                       key={item.id}
-                      className="border shadow-sm transition-all hover:shadow-md hover:border-primary/30 bg-card overflow-hidden"
+                      className="border border-stone-200 shadow-sm transition-all hover:shadow-md hover:border-stone-400 bg-white overflow-hidden"
                     >
                       <CardContent className="p-4 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
@@ -399,23 +383,23 @@ export default function OwnerDashboardPage() {
                             <img
                               src={item.imageUrl}
                               alt={item.name}
-                              className="h-10 w-10 rounded object-cover flex-shrink-0 border"
+                              className="h-10 w-10 rounded object-cover flex-shrink-0 border border-stone-200"
                             />
                           ) : (
-                            <div className="h-10 w-10 rounded bg-secondary flex items-center justify-center flex-shrink-0 border">
-                              <Utensils className="h-5 w-5 text-muted-foreground" />
+                            <div className="h-10 w-10 rounded bg-stone-100 flex items-center justify-center flex-shrink-0 border border-stone-200">
+                              <Utensils className="h-5 w-5 text-stone-500" />
                             </div>
                           )}
                           <div className="flex-grow min-w-0">
                             <p
-                              className="text-sm font-medium truncate"
+                              className="text-sm font-medium truncate text-black"
                               title={item.name}
                             >
                               {item.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-stone-600">
                               ₹{item.price.toFixed(2)}{" "}
-                              <span className="mx-1 hidden sm:inline">·</span>{" "}
+                              <span className="mx-1 hidden sm:inline"></span>{" "}
                               <span className="block sm:inline">
                                 {item.category}
                               </span>
@@ -426,7 +410,7 @@ export default function OwnerDashboardPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8"
+                            className="h-8 w-8 text-stone-700 hover:bg-stone-100"
                             onClick={() => handleEditMenuItem(item.id)}
                           >
                             <Edit className="h-4 w-4" />
@@ -437,7 +421,7 @@ export default function OwnerDashboardPage() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-100"
                               >
                                 <Trash2 className="h-4 w-4" />
                                 <span className="sr-only">
@@ -445,12 +429,12 @@ export default function OwnerDashboardPage() {
                                 </span>
                               </Button>
                             </AlertDialogTrigger>
-                            <AlertDialogContent>
+                            <AlertDialogContent className="bg-white border-stone-300">
                               <AlertDialogHeader>
-                                <AlertDialogTitle>
+                                <AlertDialogTitle className="text-black">
                                   Are you absolutely sure?
                                 </AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogDescription className="text-stone-600">
                                   This action cannot be undone. This will
                                   permanently delete the menu item "
                                   <span className="font-semibold">
@@ -460,10 +444,18 @@ export default function OwnerDashboardPage() {
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel
+                                  className={buttonVariants({
+                                    variant: "outline",
+                                    size: "sm",
+                                  })}
+                                >
+                                  Cancel
+                                </AlertDialogCancel>
                                 <AlertDialogAction
                                   className={buttonVariants({
                                     variant: "destructive",
+                                    size: "sm",
                                   })}
                                   onClick={() =>
                                     handleDeleteMenuItem(item.id, item.name)
@@ -480,101 +472,93 @@ export default function OwnerDashboardPage() {
                   ))
                 ) : (
                   <div className="h-full flex items-center justify-center">
-                    {" "}
-                    {/* Center placeholder text */}
-                    <p className="text-sm text-muted-foreground text-center py-4">
+                    <p className="text-sm text-stone-500 text-center py-4">
                       No menu items added yet.
                     </p>
                   </div>
                 )}
               </div>
             </CardContent>
-            {/* Footer remains at the bottom */}
-            <CardFooter className="border-t px-6 py-3 bg-muted/50 flex justify-center">
+            <CardFooter className="border-t border-stone-300 px-6 py-3 bg-stone-50 flex justify-center">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-primary hover:bg-primary/10 h-8 px-3"
+                className="text-black hover:bg-black/10 h-8 px-3"
               >
                 View/Edit Full Menu
                 <ExternalLink className="ml-1.5 h-4 w-4" />
               </Button>
             </CardFooter>
           </Card>
-        </div>{" "}
-        {/* End Core Management Grid */}
-        {/* Additional Tools Section */}
-        <div className="mt-12 mb-8 border-b pb-4 pt-4">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground">
+        </div>
+
+        <div className="mt-12 mb-8 border-b border-stone-300 pb-4 pt-4">
+          <h2 className="text-3xl font-semibold tracking-tight text-black">
             Additional Tools
           </h2>
-          <p className="mt-2 text-base text-muted-foreground">
+          <p className="mt-2 text-base text-stone-600">
             Other operational areas (features coming soon).
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {/* Inventory Card */}
-          <Card className="border bg-card shadow-sm">
+          <Card className="border border-stone-300 bg-white shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <div className="space-y-1">
-                <CardTitle className="text-xl font-semibold">
+                <CardTitle className="text-xl font-semibold text-black">
                   Inventory
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-stone-600">
                   Track stock levels & manage suppliers.
                 </CardDescription>
               </div>
-              <Boxes className="h-6 w-6 text-muted-foreground" />
+              <Boxes className="h-6 w-6 text-stone-500" />
             </CardHeader>
             <CardContent className="pt-4">
               <Alert
                 variant="default"
-                className="border-yellow-500/50 bg-yellow-50 text-yellow-900 dark:bg-yellow-950/60 dark:text-yellow-200 dark:border-yellow-700/80"
+                className="border-stone-400 bg-stone-100 text-stone-800"
               >
-                <Construction className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
-                <AlertTitle className="font-semibold text-yellow-800 dark:text-yellow-300">
+                <Construction className="h-5 w-5 text-stone-600" />
+                <AlertTitle className="font-semibold text-stone-900">
                   Feature Under Development
                 </AlertTitle>
-                <AlertDescription className="text-sm">
+                <AlertDescription className="text-sm text-stone-700">
                   Advanced inventory management tools are coming soon. Stay
                   tuned!
                 </AlertDescription>
               </Alert>
             </CardContent>
           </Card>
-          {/* Staff Scheduling Card */}
-          <Card className="border bg-card shadow-sm">
+          <Card className="border border-stone-300 bg-white shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <div className="space-y-1">
-                <CardTitle className="text-xl font-semibold">
+                <CardTitle className="text-xl font-semibold text-black">
                   Staff Scheduling
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-stone-600">
                   Plan shifts and manage availability.
                 </CardDescription>
               </div>
-              <UsersRound className="h-6 w-6 text-muted-foreground" />
+              <UsersRound className="h-6 w-6 text-stone-500" />
             </CardHeader>
             <CardContent className="pt-4">
               <Alert
                 variant="default"
-                className="border-blue-500/50 bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-200 dark:border-blue-700/80"
+                className="border-stone-400 bg-stone-100 text-stone-800"
               >
-                <Construction className="h-5 w-5 text-blue-600 dark:text-blue-500" />
-                <AlertTitle className="font-semibold text-blue-800 dark:text-blue-300">
+                <Construction className="h-5 w-5 text-stone-600" />
+                <AlertTitle className="font-semibold text-stone-900">
                   Coming Soon!
                 </AlertTitle>
-                <AlertDescription className="text-sm">
+                <AlertDescription className="text-sm text-stone-700">
                   Tools for scheduling and team communication are under
                   development.
                 </AlertDescription>
               </Alert>
             </CardContent>
           </Card>
-        </div>{" "}
-        {/* End Additional Tools Grid */}
-      </div>{" "}
-      {/* End Container */}
-    </div> /* End Page Wrapper */
+        </div>
+      </div>
+    </div>
   );
 }
