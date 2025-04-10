@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { RestaurantCard } from "@/components/restaurant-card";
-import type { Restaurant } from "@/components/restaurant-card";
+import { RestaurantCard } from "@/components/customer/restaurant-card";
+import type { Restaurant } from "@/components/customer/restaurant-card";
 import { CalendarDays, Heart, Search, Gift } from "lucide-react";
 
 const mockRestaurants: Restaurant[] = [

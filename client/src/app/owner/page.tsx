@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,16 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Check, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  AlertCircle,
+  Upload,
+} from "lucide-react";
 
 interface RestaurantFormData {
   name: string;
@@ -63,7 +67,6 @@ export default function RestaurantSetup() {
     if (file) {
       setFormData((prev) => ({ ...prev, logo: file }));
 
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewLogo(reader.result as string);
@@ -73,7 +76,6 @@ export default function RestaurantSetup() {
   };
 
   const handleNextStep = () => {
-    // Validate current step before proceeding
     if (!isCurrentStepValid()) {
       setValidationError("Please fill out this field before continuing");
       return;
@@ -96,16 +98,16 @@ export default function RestaurantSetup() {
 
   const isCurrentStepValid = (): boolean => {
     switch (currentStep) {
-      case 0: // Restaurant name
+      case 0:
         return formData.name.trim() !== "";
-      case 1: // Location
+      case 1:
         return formData.location.trim() !== "";
-      case 2: // Speciality
+      case 2:
         return formData.speciality.trim() !== "";
-      case 3: // Description
+      case 3:
         return formData.description.trim() !== "";
-      case 4: // Logo
-        return true; // Logo is optional
+      case 4:
+        return true;
       default:
         return true;
     }
@@ -115,7 +117,6 @@ export default function RestaurantSetup() {
     setIsSubmitting(true);
 
     try {
-      // Create FormData object to handle file upload
       const data = new FormData();
       data.append("name", formData.name);
       data.append("location", formData.location);
@@ -135,10 +136,6 @@ export default function RestaurantSetup() {
       //   router.push("/owner/dashboard");
       // }
 
-      // For now just redirect
-      console.log("Restaurant data:", formData);
-
-      // Show success message (could be replaced with proper notification)
       setTimeout(() => {
         router.push("/owner/dashboard");
       }, 1500);
@@ -153,13 +150,13 @@ export default function RestaurantSetup() {
   };
 
   const cuisineOptions = [
-    "Italian",
-    "Chinese",
-    "Japanese",
     "Indian",
+    "Chinese",
+    "Italian",
+    "French",
     "Mexican",
-    "American",
-    "Other",
+    "Thai",
+    "Japanese",
   ];
 
   const getProgressPercentage = () => {
@@ -170,52 +167,67 @@ export default function RestaurantSetup() {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium text-center">
+          <div className="space-y-4 text-center">
+            <h3 className="text-5xl font-serif whitespace-nowrap mb-4">
               What's the name of your restaurant?
             </h3>
+            <p className="text-stone-600 font-serif mb-6">
+              Please enter your restaurant&aphos;s official name as customers
+              will see it. <br /> Use only letters, numbers, and spaces, no
+              special characters.
+            </p>
             <Input
               id="name"
               name="name"
               placeholder="Enter your restaurant name"
               value={formData.name}
               onChange={handleInputChange}
-              className={validationError ? "border-red-500" : ""}
+              className={`mx-auto max-w-xs text-center ${validationError ? "border-red-500" : ""}`}
             />
           </div>
         );
       case 1:
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium text-center">
+          <div className="space-y-4 text-center">
+            <h3 className="text-5xl font-serif whitespace-nowrap mb-4">
               Where is your restaurant located?
             </h3>
+            <p className="text-stone-600 font-serif mb-6">
+              Please enter your restaurant&apos;s complete address, including
+              street and city. <br /> This helps customers easily find your
+              location.
+            </p>
             <Input
               id="location"
               name="location"
               placeholder="Enter your restaurant address"
               value={formData.location}
               onChange={handleInputChange}
-              className={validationError ? "border-red-500" : ""}
+              className={`mx-auto max-w-xs text-center ${validationError ? "border-red-500" : ""}`}
             />
           </div>
         );
       case 2:
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium text-center">
+          <div className="space-y-4 text-center">
+            <h3 className="text-5xl font-serif whitespace-nowrap mb-4">
               What cuisine does your restaurant specialize in?
             </h3>
+            <p className="text-stone-600 font-serif mb-6">
+              Select your restaurant&apos;s primary cuisine type from the list.{" "}
+              <br /> Choose the one that best represents your menu.
+            </p>
             <Select
               value={formData.speciality}
               onValueChange={handleSpecialityChange}
             >
               <SelectTrigger
                 id="speciality"
-                className={validationError ? "border-red-500" : ""}
+                className={`mx-auto max-w-xs bg-stone-200 text-center justify-center ${validationError ? "border-red-500" : ""}`}
               >
                 <SelectValue placeholder="Select your cuisine speciality" />
               </SelectTrigger>
+
               <SelectContent>
                 {cuisineOptions.map((cuisine) => (
                   <SelectItem key={cuisine} value={cuisine}>
@@ -228,10 +240,15 @@ export default function RestaurantSetup() {
         );
       case 3:
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium text-center">
+          <div className="space-y-4 text-center">
+            <h3 className="text-5xl font-serif whitespace-nowrap mb-4">
               Tell us about your restaurant
             </h3>
+            <p className="text-stone-600 font-serif mb-6">
+              Describe your restaurant&apos;s atmosphere, unique dishes, and
+              what sets it apart. <br /> This helps customers understand the
+              experience you offer.
+            </p>
             <Textarea
               id="description"
               name="description"
@@ -239,41 +256,61 @@ export default function RestaurantSetup() {
               value={formData.description}
               onChange={handleInputChange}
               rows={5}
-              className={validationError ? "border-red-500" : ""}
+              className={`mx-auto max-w-sm text-center ${validationError ? "border-red-500" : ""}`}
+              style={{ resize: "none" }}
             />
           </div>
         );
       case 4:
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium text-center">
+          <div className="space-y-4 text-center">
+            <h3 className="text-5xl font-serif whitespace-nowrap mb-4">
               Upload your restaurant's logo
             </h3>
+            <p className="text-stone-600 font-serif mb-6">
+              Upload a high-quality logo that represents your restaurant&apos;s
+              brand. <br /> A clear and recognizable logo builds trust with
+              customers. <br /> For best results, use a square image.
+            </p>
             <div className="flex flex-col items-center gap-4">
               {previewLogo ? (
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-primary">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-primary mx-auto group cursor-pointer">
                   <img
                     src={previewLogo}
                     alt="Logo preview"
                     className="w-full h-full object-cover"
                   />
+                  <label
+                    htmlFor="logo"
+                    className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Upload className="h-8 w-8 text-white" />
+                    <Input
+                      id="logo"
+                      name="logo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
               ) : (
-                <div className="flex items-center justify-center w-32 h-32 rounded-full bg-muted">
-                  <p className="text-sm text-muted-foreground">Logo Preview</p>
-                </div>
+                <label
+                  htmlFor="logo"
+                  className="relative flex items-center justify-center w-32 h-32 rounded-full bg-stone-400 mx-auto mb-4 cursor-pointer hover:bg-stone-500 transition-colors"
+                >
+                  <Upload className="h-8 w-8 text-white" />
+                  <Input
+                    id="logo"
+                    name="logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
               )}
-              <Input
-                id="logo"
-                name="logo"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="max-w-xs cursor-pointer"
-              />
-              <p className="text-sm text-muted-foreground text-center">
-                Upload a square image for best results
-              </p>
             </div>
           </div>
         );
@@ -283,72 +320,65 @@ export default function RestaurantSetup() {
   };
 
   return (
-    <div className="container max-w-md mx-auto py-10 px-4">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Restaurant Setup
-          </CardTitle>
-          <CardDescription className="text-center">
-            Tell customers about your restaurant
-          </CardDescription>
+    <div className="min-h-screen bg-stone-200 flex items-center justify-center py-10 px-4">
+      <div className="max-w-md mx-auto">
+        <Card className="w-full bg-stone-200 border-0 shadow-none">
+          <CardHeader className="text-center bg-transparent">
+            {/* Progress bar */}
+            <div className="w-full bg-stone-300 rounded-full h-2 mt-4">
+              <div
+                className="bg-primary h-2 rounded-full transition-all duration-300 ease-in-out"
+                style={{ width: `${getProgressPercentage()}%` }}
+              ></div>
+            </div>
+          </CardHeader>
 
-          {/* Progress bar */}
-          <div className="w-full bg-muted rounded-full h-2 mt-4">
-            <div
-              className="bg-primary h-2 rounded-full transition-all duration-300 ease-in-out"
-              style={{ width: `${getProgressPercentage()}%` }}
-            ></div>
-          </div>
-          <div className="text-xs text-muted-foreground text-right mt-1">
-            Step {currentStep + 1} of {totalSteps}
-          </div>
-        </CardHeader>
+          <CardContent className="px-8 pt-6 pb-8 bg-transparent">
+            <div className="min-h-[250px] flex flex-col items-center justify-center">
+              {renderQuestion()}
 
-        <CardContent className="px-8 pt-6 pb-8">
-          <div className="min-h-[220px] flex flex-col items-center justify-center">
-            {renderQuestion()}
+              {validationError && (
+                <div className="flex items-center gap-2 text-red-500 mt-4 text-sm">
+                  <AlertCircle size={16} />
+                  <span>{validationError}</span>
+                </div>
+              )}
 
-            {validationError && (
-              <div className="flex items-center gap-2 text-red-500 mt-2 text-sm">
-                <AlertCircle size={16} />
-                <span>{validationError}</span>
-              </div>
-            )}
+              {currentStep === totalSteps - 1 && isSubmitting && (
+                <div className="mt-4 text-center text-primary font-medium">
+                  Saving your restaurant information...
+                </div>
+              )}
+            </div>
+          </CardContent>
 
-            {currentStep === totalSteps - 1 && isSubmitting && (
-              <div className="mt-4 text-center text-primary font-medium">
-                Saving your restaurant information...
-              </div>
-            )}
-          </div>
-        </CardContent>
+          <CardFooter className="flex justify-center gap-4 px-8 pb-8 bg-transparent">
+            <Button
+              onClick={handlePrevStep}
+              disabled={currentStep === 0}
+              className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
+            >
+              <ArrowLeft className="h-5 w-5 text-black" />
+              <span className="sr-only">Previous</span>
+            </Button>
 
-        <CardFooter className="flex justify-between px-8 pb-8">
-          <Button
-            variant="outline"
-            onClick={handlePrevStep}
-            disabled={currentStep === 0}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-
-          <Button onClick={handleNextStep} disabled={isSubmitting}>
-            {currentStep === totalSteps - 1 ? (
-              <>
-                Complete
-                <Check className="ml-2 h-4 w-4" />
-              </>
-            ) : (
-              <>
-                Next
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
+            <Button
+              onClick={handleNextStep}
+              disabled={isSubmitting}
+              className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
+            >
+              {currentStep === totalSteps - 1 ? (
+                <Check className="h-5 w-5 text-black" />
+              ) : (
+                <ArrowRight className="h-5 w-5 text-black" />
+              )}
+              <span className="sr-only">
+                {currentStep === totalSteps - 1 ? "Complete" : "Next"}
+              </span>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }

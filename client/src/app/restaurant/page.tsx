@@ -239,18 +239,16 @@ export default function RestaurantPage() {
 
   const handleUpdateQuantity = (itemId: string, change: number) => {
     setCart((prevCart) => {
-      return (
-        prevCart
-          .map((item) =>
-            item.id === itemId
-              ? {
-                  ...item,
-                  quantity: Math.max(0, item.quantity + change),
-                }
-              : item
-          )
-          .filter((item) => item.quantity > 0)
-      );
+      return prevCart
+        .map((item) =>
+          item.id === itemId
+            ? {
+                ...item,
+                quantity: Math.max(0, item.quantity + change),
+              }
+            : item
+        )
+        .filter((item) => item.quantity > 0);
     });
   };
 
@@ -290,8 +288,9 @@ export default function RestaurantPage() {
               <span className="italic">{restaurant.name}</span>
             </h1>
             <p className="mt-6 text-lg text-black/80 font-serif max-w-2xl mx-auto">
-              Experience authentic {restaurant.cuisine} cuisine in a memorable setting.
-              Savor the flavors while enjoying the warm ambiance of our restaurant.
+              Experience authentic {restaurant.cuisine} cuisine in a memorable
+              setting. Savor the flavors while enjoying the warm ambiance of our
+              restaurant.
             </p>
           </div>
         </div>
@@ -346,9 +345,7 @@ export default function RestaurantPage() {
 
             <Card className="overflow-hidden border border-stone-300 shadow-md w-full max-w-md mx-auto">
               <CardHeader className="p-6 pb-4">
-                <CardTitle className="text-xl">
-                  Reserve Your Table
-                </CardTitle>
+                <CardTitle className="text-xl">Reserve Your Table</CardTitle>
                 <CardDescription>
                   Experience an unforgettable dining moment
                 </CardDescription>
@@ -418,9 +415,7 @@ export default function RestaurantPage() {
                         <SelectContent className="max-h-72">
                           <SelectGroup>
                             <SelectLabel>Lunch</SelectLabel>
-                            <SelectItem value="12:00 PM">
-                              12:00 PM
-                            </SelectItem>
+                            <SelectItem value="12:00 PM">12:00 PM</SelectItem>
                             <SelectItem value="12:30 PM">12:30 PM</SelectItem>
                             <SelectItem value="1:00 PM">1:00 PM</SelectItem>
                             <SelectItem value="1:30 PM">1:30 PM</SelectItem>
@@ -429,9 +424,7 @@ export default function RestaurantPage() {
                           </SelectGroup>
                           <SelectGroup>
                             <SelectLabel>Dinner</SelectLabel>
-                            <SelectItem value="6:00 PM">
-                              6:00 PM
-                            </SelectItem>
+                            <SelectItem value="6:00 PM">6:00 PM</SelectItem>
                             <SelectItem value="6:30 PM">6:30 PM</SelectItem>
                             <SelectItem value="7:00 PM">7:00 PM</SelectItem>
                             <SelectItem value="7:30 PM">7:30 PM</SelectItem>
@@ -502,9 +495,7 @@ export default function RestaurantPage() {
           </div>
 
           <div className="md:col-span-2">
-            <h2 className="text-3xl font-semibold tracking-tight mb-6">
-              Menu
-            </h2>
+            <h2 className="text-3xl font-semibold tracking-tight mb-6">Menu</h2>
             <Accordion type="multiple" className="w-full space-y-3">
               {restaurant.menu.categories.map((category) => (
                 <AccordionItem
