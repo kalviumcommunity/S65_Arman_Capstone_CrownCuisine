@@ -17,12 +17,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  AlertCircle,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, AlertCircle } from "lucide-react";
 
 export default function CustomerSetup({ initialData = {} }) {
   const router = useRouter();
@@ -98,7 +93,9 @@ export default function CustomerSetup({ initialData = {} }) {
               What should we call you?
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-            Please enter your full name as it will appear on your orders. <br/>Avoid using numbers or special characters.
+              Please enter your full name as it will appear on your orders.{" "}
+              <br />
+              Avoid using numbers or special characters.
             </p>
             <Input
               id="name"
@@ -119,7 +116,8 @@ export default function CustomerSetup({ initialData = {} }) {
               What's your phone number?
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-            We'll use this to keep you informed about your food orders, table <br/> reservations, and any new deals or special offers.
+              We'll use this to keep you informed about your food orders, table{" "}
+              <br /> reservations, and any new deals or special offers.
             </p>
             <Input
               id="phoneNumber"
@@ -141,7 +139,8 @@ export default function CustomerSetup({ initialData = {} }) {
               What's your favorite cuisine?
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-            This helps us understand your preferences better so we can suggest <br/> restaurants, dishes, and offers that match your taste.
+              This helps us understand your preferences better so we can suggest{" "}
+              <br /> restaurants, dishes, and offers that match your taste.
             </p>
             <Select
               value={formData.favoriteCuisine}
@@ -226,7 +225,9 @@ export default function CustomerSetup({ initialData = {} }) {
                     handleSubmit();
                   }
                 } else {
-                  setValidationError("Please fill out this field before continuing");
+                  setValidationError(
+                    "Please fill out this field before continuing"
+                  );
                 }
               }}
               disabled={isSubmitting}

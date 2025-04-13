@@ -162,9 +162,9 @@ export default function RestaurantSetup({ initialData = {} }) {
               What's the name of your restaurant?
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-              Please enter your restaurant&apos;s official name as customers will
-              see it. <br /> Use only letters, numbers, and spaces, no special
-              characters.
+              Please enter your restaurant&apos;s official name as customers
+              will see it. <br /> Use only letters, numbers, and spaces, no
+              special characters.
             </p>
             <Input
               id="name"
@@ -185,8 +185,9 @@ export default function RestaurantSetup({ initialData = {} }) {
               Where is your restaurant located?
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-              Please enter your restaurant&apos;s complete address, including street
-              and city. <br /> This helps customers easily find your location.
+              Please enter your restaurant&apos;s complete address, including
+              street and city. <br /> This helps customers easily find your
+              location.
             </p>
             <Input
               id="location"
@@ -239,9 +240,9 @@ export default function RestaurantSetup({ initialData = {} }) {
               Tell us about your restaurant
             </h3>
             <p className="text-stone-800 font-serif mb-6">
-              Describe your restaurant&apos;s atmosphere, unique dishes, and what
-              sets it apart. <br /> This helps customers understand the experience
-              you offer.
+              Describe your restaurant&apos;s atmosphere, unique dishes, and
+              what sets it apart. <br /> This helps customers understand the
+              experience you offer.
             </p>
             <Textarea
               id="description"

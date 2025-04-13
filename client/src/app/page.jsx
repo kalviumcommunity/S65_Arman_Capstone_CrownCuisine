@@ -21,8 +21,8 @@ export default function Home() {
                 </h1>
                 <p className="mx-auto max-w-2xl text-lg font-serif text-stone-800 md:text-xl">
                   Make running your restaurant simple! Our easy-to-use app lets
-                  you manage menus, reservations, staff schedules, and inventory,
-                  all in one place.
+                  you manage menus, reservations, staff schedules, and
+                  inventory, all in one place.
                 </p>
                 <div className="pt-6 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                   <Button
@@ -49,7 +49,6 @@ export default function Home() {
           </section>
         </main>
       </div>
-      {/* Display the Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

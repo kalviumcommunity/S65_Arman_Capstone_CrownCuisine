@@ -53,8 +53,9 @@ export const AuthModal = ({ isOpen, onClose }) => {
                   Sign in or create an account
                 </h2>
                 <p className="text-sm text-stone-800 mt-3">
-    Want full access now? Sign in with Google or <br/> Twitter to save your data and enjoy <br/> all the features!
-</p>
+                  Want full access now? Sign in with Google or <br /> Twitter to
+                  save your data and enjoy <br /> all the features!
+                </p>
               </div>
 
               {error && (
