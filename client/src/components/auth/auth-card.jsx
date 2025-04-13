@@ -21,7 +21,6 @@ export const AuthModal = ({ isOpen, onClose }) => {
         provider: "google",
       });
 
-      // Redirect to the dashboard after login
       router.push("/dashboard");
     } catch (err) {
       console.error("Authentication error:", err);
