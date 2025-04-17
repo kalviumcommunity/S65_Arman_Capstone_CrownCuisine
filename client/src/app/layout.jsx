@@ -1,18 +1,18 @@
 import "./globals.css";
 import { Atkinson_Hyperlegible } from "next/font/google";
 
+// Define metadata for your application or page
+export const metadata = {
+  title: "Crown Cuisine",
+  description: "Your app description goes here.",
+};
+
 const atkinson = Atkinson_Hyperlegible({
   weight: ["400", "700"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-atkinson",
 });
-
-export const metadata = {
-  title: "Crown Cuisine",
-  description:
-    "Crown Cuisine streamlines restaurant operations with inventory tracking, reservations, scheduling, digital menus, and payments.",
-};
 
 export default function RootLayout({ children }) {
   return (

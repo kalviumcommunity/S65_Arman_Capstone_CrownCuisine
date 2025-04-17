@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -8,24 +8,23 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Crown, User, Users } from "lucide-react";
+import { Crown, User, Users } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function RoleSelectionPage() {
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState("");
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsPageLoaded(true);
+  }, []);
 
   const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-  };
-
-  const handleContinue = () => {
-    if (!selectedRole) return;
-    if (selectedRole === "owner") {
+    if (role === "owner") {
       router.push("/owner/setup");
-    } else if (selectedRole === "customer") {
+    } else if (role === "customer") {
       router.push("/customer/setup");
-    } else if (selectedRole === "staff") {
+    } else if (role === "staff") {
       router.push("/staff/setup");
     }
   };
@@ -52,50 +51,84 @@ export default function RoleSelectionPage() {
   };
 
   const optionBtnClasses = (role) =>
-    `flex flex-col items-center justify-center rounded-lg w-64 h-64 p-6 cursor-pointer transition-colors ${
-      selectedRole === role ? "bg-stone-300" : "bg-stone-200 hover:bg-stone-300"
+    `flex flex-col items-center justify-center rounded-lg w-64 h-64 p-6 transition-colors ${
+      role === "staff"
+        ? "bg-stone-200 text-stone-400 cursor-not-allowed opacity-60"
+        : "bg-stone-200 hover:bg-stone-300 active:bg-stone-300 cursor-pointer"
     }`;
 
   return (
-    <div className="min-h-screen bg-stone-200 flex flex-col items-center justify-center px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isPageLoaded ? 1 : 0 }}
+      transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+      className="min-h-screen bg-stone-200 flex flex-col items-center justify-center px-4"
+    >
       <Card className="w-full max-w-4xl bg-stone-200 border-0 shadow-none">
         <CardHeader className="text-center mb-4 bg-transparent">
-          <h1 className="text-stone-900 text-5xl font-serif whitespace-nowrap mb-4">
-            Who are you?
-          </h1>
-          <p className="text-stone-800 font-serif">
-            Select your role to continue: Owner to manage the restaurant, menu,
-            and staff; <br /> Customer to browse and order food; or Staff to
-            assist with orders and daily operations.
-          </p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isPageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+          >
+            <h1 className="text-stone-900 text-5xl font-serif whitespace-nowrap mb-4">
+              Who are you?
+            </h1>
+            <p className="text-stone-800 font-serif">
+              Select your role to continue: Owner to manage the restaurant,
+              menu, and staff; <br /> Customer to browse and order food; or
+              Staff to assist with orders and daily operations.
+            </p>
+          </motion.div>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-6">
-          <div className="flex justify-center gap-8 flex-wrap">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isPageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+            className="flex justify-center gap-8 flex-wrap"
+          >
             {Object.entries(roleData).map(([role, data]) => (
-              <div
+              <motion.div
                 key={role}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isPageLoaded ? 1 : 0 }}
+                transition={{
+                  duration: 0.4,
+                  ease: [0.2, 0.1, 0.3, 1.0],
+                }}
                 className={optionBtnClasses(role)}
-                onClick={() => handleRoleSelect(role)}
+                onClick={
+                  role === "staff" ? undefined : () => handleRoleSelect(role)
+                }
+                tabIndex={role === "staff" ? -1 : 0}
+                role="button"
+                aria-disabled={role === "staff"}
+                onKeyDown={(e) => {
+                  if (
+                    role !== "staff" &&
+                    (e.key === "Enter" || e.key === " ")
+                  ) {
+                    handleRoleSelect(role);
+                  }
+                }}
               >
                 {data.icon}
-                <p className="font-semibold  text-stone-900 text-lg mb-2">
+                <p className="font-semibold text-stone-900 text-lg mb-2">
                   {data.title}
                 </p>
                 <p className="text-stone-800 text-center">{data.description}</p>
-              </div>
+                {role === "staff" && (
+                  <span className="mt-4 text-xs text-stone-500 italic">
+                    Coming soon
+                  </span>
+                )}
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </CardContent>
-        <CardFooter className="flex justify-center mt-6 bg-transparent">
-          <Button
-            onClick={handleContinue}
-            disabled={!selectedRole}
-            className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer flex items-center justify-center"
-          >
-            <ArrowRight className="h-5 w-5 text-black" />
-          </Button>
-        </CardFooter>
+        {/* CardFooter and Continue button removed */}
       </Card>
-    </div>
+    </motion.div>
   );
 }

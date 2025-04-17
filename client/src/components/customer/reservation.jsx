@@ -1,150 +1,130 @@
-import React, { useState } from "react";
+"use client";
+
+import React from "react";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PlusCircle, ExternalLink } from "lucide-react";
 
-const ReservationCard = ({ reservation }) => {
-  const {
-    id = "res-123",
-    restaurantName = "Restaurant Name",
-    status = "pending",
-    time = "12:00 PM",
-    guests = 2,
-  } = reservation || {};
+const stone300 = "#d6d3d1";
 
-  const [showButtons, setShowButtons] = useState(false);
-
-  const getStatusClasses = (status) => {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return "bg-green-100 text-green-800 border border-green-200";
-      case "rejected":
-        return "bg-red-100 text-red-800 border border-red-200";
-      case "pending":
-      default:
-        return "bg-amber-100 text-amber-800 border border-amber-200";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return "Confirmed";
-      case "rejected":
-        return "Rejected";
-      case "pending":
-      default:
-        return "Pending";
-    }
-  };
-
-  return (
-    <Card
-      className="overflow-hidden border-none shadow-none transition-shadow bg-stone-200 px-4"
-      onMouseEnter={() => setShowButtons(true)}
-      onMouseLeave={() => setShowButtons(false)}
-    >
-      <div className="flex items-center justify-between p-3">
-        <div className="flex items-center flex-grow">
-          <div className="flex flex-col">
-            <h3 className="font-medium text-sm text-stone-900 truncate">
-              {restaurantName}
-            </h3>
-            <div className="text-xs text-stone-800">
-              {time} - Guests: {guests}
-            </div>
-          </div>
-        </div>
-
-        <Badge
-          className={`${getStatusClasses(
-            status
-          )} mx-2 px-2 py-0.5 text-xs flex-shrink-0`}
-        >
-          {getStatusText(status)}
-        </Badge>
-
-        <div className={`flex gap-3 flex-shrink-0 ${showButtons ? "" : "hidden"}`}>
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-xs h-6 px-1.5"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-xs h-6 px-1.5 text-red-600 hover:bg-red-50 hover:text-red-700"
-          >
-            Modify
-          </Button>
-        </div>
-      </div>
-    </Card>
-  );
-};
-
-const ReservationList = ({ reservations }) => {
-  const defaultReservations = [
+const RestaurantList = ({ restaurants }) => {
+  const defaultRestaurants = [
     {
-      id: "res-1",
-      restaurantName: "La Piazza",
-      date: "Oct 15, 2023",
-      time: "7:30 PM",
-      guests: 2,
-      status: "approved",
-      tableNumber: "A12",
+      id: "r1",
+      name: "La Piazza",
+      cuisine: "Italian",
+      location: "Downtown",
+      status: "open",
+      rating: 4.7,
     },
     {
-      id: "res-2",
-      restaurantName: "Sakura Sushi",
-      date: "Oct 18, 2023",
-      time: "6:00 PM",
-      guests: 4,
-      status: "approved",
-      tableNumber: "B8",
+      id: "r2",
+      name: "Sakura Sushi",
+      cuisine: "Japanese",
+      location: "Uptown",
+      status: "closed",
+      rating: 4.5,
     },
     {
-      id: "res-3",
-      restaurantName: "Bistro Moderne",
-      date: "Oct 22, 2023",
-      time: "8:00 PM",
-      guests: 2,
-      status: "approved",
-      tableNumber: "C5",
+      id: "r3",
+      name: "Bistro Moderne",
+      cuisine: "French",
+      location: "Midtown",
+      status: "open",
+      rating: 4.8,
     },
     {
-      id: "res-4",
-      restaurantName: "The Cozy Corner Cafe",
-      date: "Oct 25, 2023",
-      time: "10:00 AM",
-      guests: 1,
-      status: "approved",
-      tableNumber: "T1",
+      id: "r4",
+      name: "The Cozy Corner Cafe",
+      cuisine: "Cafe",
+      location: "Old Town",
+      status: "open",
+      rating: 4.3,
+    },
+    {
+      id: "r5",
+      name: "Spice Route",
+      cuisine: "Indian",
+      location: "Market Street",
+      status: "closed",
+      rating: 4.6,
+    },
+    {
+      id: "r6",
+      name: "El Rancho",
+      cuisine: "Mexican",
+      location: "West End",
+      status: "open",
+      rating: 4.4,
     },
   ];
 
-  const reservationList = reservations || defaultReservations;
+  const restaurantList = restaurants || defaultRestaurants;
 
   return (
-    <div className="space-y-4">
-      {reservationList.length === 0 ? (
-        <Card className="p-6 text-center text-gray-500 flex items-center justify-center">
-          <div>
-            <p>You don't have any reservations yet.</p>
-            <Button className="mt-4">Find Restaurants</Button>
-          </div>
-        </Card>
-      ) : (
-        <div className="space-y-6">
-          {reservationList.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
+    <div className="flex flex-col h-full">
+      <div className="relative flex-grow" style={{ minHeight: "500px" }}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto h-full"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", maxHeight: "500px" }}
+        >
+          {restaurantList.map((restaurant) => (
+            <Card
+              key={restaurant.id}
+              className="bg-stone-100 border-none shadow-none overflow-hidden h-[200px] flex flex-col justify-between rounded-md"
+            >
+              <div className="p-4">
+                <div className="flex justify-between items-start">
+                  <h3 className="font-medium text-stone-900">
+                    {restaurant.name}
+                  </h3>
+                  <div className="text-stone-900 font-medium">
+                    {restaurant.rating} ★
+                  </div>
+                </div>
+                <div className="text-xs text-stone-500 mt-1">
+                  {restaurant.cuisine} • {restaurant.location}
+                </div>
+              </div>
+              <div className="p-4 border-t border-stone-200 flex items-center justify-between">
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    restaurant.status === "open"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {restaurant.status === "open" ? "Open" : "Closed"}
+                </span>
+                <Button size="sm" variant="outline" className="h-7 text-xs">
+                  View
+                </Button>
+              </div>
+            </Card>
           ))}
         </div>
-      )}
+        
+        {/* Gradient overlay - positioned relative to the scrollable container */}
+        <div
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{
+            height: "80px",
+            background: `linear-gradient(to bottom, transparent, ${stone300})`,
+            zIndex: 1,
+          }}
+        />
+      </div>
+
+      <div className="mt-5 pt-4 border-stone-400 flex justify-end gap-3">
+        <Button className="bg-stone-100 hover:bg-stone-300 text-stone-900 cursor-pointer">
+          Add Restaurant <PlusCircle className="ml-1 h-4 w-4" />
+        </Button>
+        <Button className="bg-stone-100 hover:bg-stone-300 text-stone-900 cursor-pointer">
+          View All Restaurants <ExternalLink className="ml-1 h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 };
 
-export default ReservationList;
+export default RestaurantList;

@@ -37,22 +37,32 @@ const CustomerPreview = () => {
   return (
     <Card className="w-full max-w-6xl mx-auto overflow-hidden bg-stone-200 border-none shadow-xl">
       <div className="bg-stone-200 py-10 text-stone-900 text-center">
-        <h1 className="text-3xl font-serif mb-2">Afternoon, <i>Arman</i></h1>
+        <h1 className="text-3xl font-serif mb-2">
+          Afternoon, <i>Arman</i>
+        </h1>
         <p className="text-sm text-stone-800 font-serif">
-          Discover and explore top restaurants, browse menus, reserve tables instantly, <br/>
+          Discover and explore top restaurants, browse menus, reserve tables
+          instantly, <br />
           manage your reservations, and save special coupons for future visits.
         </p>
       </div>
-      
+
       <div className="p-4 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             {reservations.map((reservation) => (
-              <Card key={reservation.id} className="mb-3 bg-stone-100 shadow-sm">
+              <Card
+                key={reservation.id}
+                className="mb-3 bg-stone-100 shadow-sm"
+              >
                 <div className="p-3 flex justify-between items-center">
                   <div>
-                    <h3 className="font-medium text-sm">{reservation.restaurantName}</h3>
-                    <p className="text-xs text-stone-600">{reservation.time} - Guests: {reservation.guests}</p>
+                    <h3 className="font-medium text-sm">
+                      {reservation.restaurantName}
+                    </h3>
+                    <p className="text-xs text-stone-600">
+                      {reservation.time} - Guests: {reservation.guests}
+                    </p>
                   </div>
                   <Badge className="bg-green-50 text-green-700 border border-green-200 text-xs">
                     Confirmed
@@ -66,12 +76,14 @@ const CustomerPreview = () => {
             <Card className="bg-stone-100 shadow-sm">
               <div className="p-3">
                 <h2 className="text-base font-medium mb-1">Find Restaurants</h2>
-                <p className="text-xs text-stone-600 mb-2">Search for restaurants by name, cuisine or location</p>
+                <p className="text-xs text-stone-600 mb-2">
+                  Search for restaurants by name, cuisine or location
+                </p>
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-stone-400" />
-                  <Input 
-                    type="text" 
-                    placeholder="Search restaurants..." 
+                  <Input
+                    type="text"
+                    placeholder="Search restaurants..."
                     className="pl-7 bg-white border-stone-200 text-xs h-8"
                   />
                 </div>

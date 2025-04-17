@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Check, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CustomerSetup({ initialData = {} }) {
   const router = useRouter();
@@ -30,17 +31,8 @@ export default function CustomerSetup({ initialData = {} }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [validationError, setValidationError] = useState(null);
   const totalSteps = 3;
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setValidationError(null);
-  };
-
-  const handleSpecialityChange = (value) => {
-    setFormData((prev) => ({ ...prev, favoriteCuisine: value }));
-    setValidationError(null);
-  };
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const isCurrentStepValid = () => {
     switch (currentStep) {
@@ -55,10 +47,33 @@ export default function CustomerSetup({ initialData = {} }) {
     }
   };
 
+  useEffect(() => {
+    setIsPageLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [currentStep]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setValidationError(null);
+  };
+
+  const handleSpecialityChange = (value) => {
+    setFormData((prev) => ({ ...prev, favoriteCuisine: value }));
+    setValidationError(null);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Simulate API call delay
       setTimeout(() => {
         router.push("/customer/dashboard");
       }, 1500);
@@ -70,126 +85,163 @@ export default function CustomerSetup({ initialData = {} }) {
     }
   };
 
-  const cuisineOptions = [
-    "Indian",
-    "Chinese",
-    "Italian",
-    "French",
-    "Mexican",
-    "Thai",
-    "Japanese",
-  ];
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !isSubmitting && !isAnimating) {
+      if (isCurrentStepValid()) {
+        if (currentStep < totalSteps - 1) {
+          setCurrentStep((prev) => prev + 1);
+        } else {
+          handleSubmit();
+        }
+      } else {
+        setValidationError("Please fill out this field before continuing");
+      }
+    }
+  };
+
+  const cuisineOptions = ["Indian", "Chinese", "French", "Italian", "American"];
 
   const getProgressPercentage = () => {
     return ((currentStep + 1) / totalSteps) * 100;
   };
 
   const renderQuestion = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <div className="space-y-4 text-center">
-            <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
-              What should we call you?
-            </h3>
-            <p className="text-stone-800 font-serif mb-6">
-              Please enter your full name as it will appear on your orders.{" "}
-              <br />
-              Avoid using numbers or special characters.
-            </p>
-            <Input
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className={`mx-auto max-w-xs text-center ${
-                validationError ? "border-red-500" : ""
-              }`}
-            />
-          </div>
-        );
-      case 1:
-        return (
-          <div className="space-y-4 text-center">
-            <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
-              What's your phone number?
-            </h3>
-            <p className="text-stone-800 font-serif mb-6">
-              We'll use this to keep you informed about your food orders, table{" "}
-              <br /> reservations, and any new deals or special offers.
-            </p>
-            <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              placeholder="Enter your phone number"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className={`mx-auto max-w-xs text-center ${
-                validationError ? "border-red-500" : ""
-              }`}
-            />
-          </div>
-        );
-      case 2:
-        return (
-          <div className="space-y-4 text-center">
-            <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
-              What's your favorite cuisine?
-            </h3>
-            <p className="text-stone-800 font-serif mb-6">
-              This helps us understand your preferences better so we can suggest{" "}
-              <br /> restaurants, dishes, and offers that match your taste.
-            </p>
-            <Select
-              value={formData.favoriteCuisine}
-              onValueChange={(value) =>
-                handleInputChange({
-                  target: { name: "favoriteCuisine", value },
-                })
-              }
-            >
-              <SelectTrigger
-                id="favoriteCuisine"
-                className={`mx-auto max-w-xs bg-stone-200 text-center justify-center ${
-                  validationError ? "border-red-500" : ""
-                }`}
-              >
-                <SelectValue placeholder="Select your favorite cuisine" />
-              </SelectTrigger>
-              <SelectContent>
-                {cuisineOptions.map((cuisine) => (
-                  <SelectItem key={cuisine} value={cuisine}>
-                    {cuisine}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        );
-      default:
-        return null;
-    }
+    return (
+      <motion.div
+        key={currentStep}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+      >
+        {(() => {
+          switch (currentStep) {
+            case 0:
+              return (
+                <div className="space-y-4 text-center">
+                  <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
+                    What should we call you?
+                  </h3>
+                  <p className="text-stone-800 font-serif mb-6">
+                    Please enter your full name as it will appear on your
+                    orders. <br />
+                    Avoid using numbers or special characters.
+                  </p>
+                  <Input
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    className={`mx-auto max-w-xs text-center ${
+                      validationError ? "border-red-500" : ""
+                    }`}
+                  />
+                </div>
+              );
+            case 1:
+              return (
+                <div className="space-y-4 text-center">
+                  <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
+                    What's your phone number?
+                  </h3>
+                  <p className="text-stone-800 font-serif mb-6">
+                    We'll use this to keep you informed about your food orders,
+                    table <br /> reservations, and any new deals or special
+                    offers.
+                  </p>
+                  <Input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    className={`mx-auto max-w-xs text-center ${
+                      validationError ? "border-red-500" : ""
+                    }`}
+                  />
+                </div>
+              );
+            case 2:
+              return (
+                <div className="space-y-4 text-center">
+                  <h3 className="text-5xl text-stone-900 font-serif whitespace-nowrap mb-4">
+                    What's your favorite cuisine?
+                  </h3>
+                  <p className="text-stone-800 font-serif mb-6">
+                    This helps us understand your preferences better so we can
+                    suggest <br /> restaurants, dishes, and offers that match
+                    your taste.
+                  </p>
+                  <Select
+                    value={formData.favoriteCuisine}
+                    onValueChange={(value) =>
+                      handleInputChange({
+                        target: { name: "favoriteCuisine", value },
+                      })
+                    }
+                  >
+                    <SelectTrigger
+                      id="favoriteCuisine"
+                      className={`mx-auto max-w-xs bg-stone-200 text-center justify-center ${
+                        validationError ? "border-red-500" : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Select your favorite cuisine" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cuisineOptions.map((cuisine) => (
+                        <SelectItem key={cuisine} value={cuisine}>
+                          {cuisine}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              );
+            default:
+              return null;
+          }
+        })()}
+      </motion.div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-stone-200 flex items-center justify-center py-10 px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isPageLoaded ? 1 : 0 }}
+      transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+      className="min-h-screen bg-stone-200 flex items-center justify-center py-10 px-4"
+    >
       <div className="max-w-md mx-auto">
         <Card className="w-full bg-stone-200 border-0 shadow-none">
           <CardHeader className="text-center bg-transparent">
-            {/* Progress bar */}
-            <div className="w-full bg-stone-300 rounded-full h-2 mt-4">
-              <div
-                className="bg-stone-900 h-2 rounded-full transition-all duration-300 ease-in-out"
-                style={{ width: `${getProgressPercentage()}%` }}
-              ></div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isPageLoaded ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+            >
+              <div className="w-full bg-stone-300 rounded-full h-2 mt-4">
+                <div
+                  className="bg-stone-900 h-2 rounded-full transition-all duration-300 ease-in-out"
+                  style={{ width: `${getProgressPercentage()}%` }}
+                ></div>
+              </div>
+            </motion.div>
           </CardHeader>
 
           <CardContent className="px-8 pt-6 pb-8 bg-transparent">
-            <div className="min-h-[250px] flex flex-col items-center justify-center">
-              {renderQuestion()}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isPageLoaded ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+              className="min-h-[250px] flex flex-col items-center justify-center"
+            >
+              <AnimatePresence mode="wait">{renderQuestion()}</AnimatePresence>
 
               {validationError && (
                 <div className="flex items-center gap-2 text-red-500 mt-4 text-sm">
@@ -203,48 +255,55 @@ export default function CustomerSetup({ initialData = {} }) {
                   Saving your information...
                 </div>
               )}
-            </div>
+            </motion.div>
           </CardContent>
 
           <CardFooter className="flex justify-center gap-4 px-8 pb-8 bg-transparent">
-            <Button
-              onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 0))}
-              disabled={currentStep === 0}
-              className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isPageLoaded ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.2, 0.1, 0.3, 1.0] }}
+              className="flex justify-center gap-4"
             >
-              <ArrowLeft className="h-5 w-5 text-stone-900" />
-              <span className="sr-only">Previous</span>
-            </Button>
+              <Button
+                onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 0))}
+                disabled={currentStep === 0}
+                className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
+              >
+                <ArrowLeft className="h-5 w-5 text-stone-900" />
+                <span className="sr-only">Previous</span>
+              </Button>
 
-            <Button
-              onClick={() => {
-                if (isCurrentStepValid()) {
-                  if (currentStep < totalSteps - 1) {
-                    setCurrentStep((prev) => prev + 1);
+              <Button
+                onClick={() => {
+                  if (isCurrentStepValid()) {
+                    if (currentStep < totalSteps - 1) {
+                      setCurrentStep((prev) => prev + 1);
+                    } else {
+                      handleSubmit();
+                    }
                   } else {
-                    handleSubmit();
+                    setValidationError(
+                      "Please fill out this field before continuing"
+                    );
                   }
-                } else {
-                  setValidationError(
-                    "Please fill out this field before continuing"
-                  );
-                }
-              }}
-              disabled={isSubmitting}
-              className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
-            >
-              {currentStep === totalSteps - 1 ? (
-                <Check className="h-5 w-5 text-stone-900" />
-              ) : (
-                <ArrowRight className="h-5 w-5 text-stone-900" />
-              )}
-              <span className="sr-only">
-                {currentStep === totalSteps - 1 ? "Complete" : "Next"}
-              </span>
-            </Button>
+                }}
+                disabled={isSubmitting}
+                className="rounded-full p-3 w-12 h-12 bg-white border-0 hover:bg-stone-200 cursor-pointer"
+              >
+                {currentStep === totalSteps - 1 ? (
+                  <Check className="h-5 w-5 text-stone-900" />
+                ) : (
+                  <ArrowRight className="h-5 w-5 text-stone-900" />
+                )}
+                <span className="sr-only">
+                  {currentStep === totalSteps - 1 ? "Complete" : "Next"}
+                </span>
+              </Button>
+            </motion.div>
           </CardFooter>
         </Card>
       </div>
-    </div>
+    </motion.div>
   );
 }
