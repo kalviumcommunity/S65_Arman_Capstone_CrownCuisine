@@ -12,12 +12,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const menuItems = [
   {
@@ -92,6 +86,33 @@ const tableReservations = [
     status: "pending",
     tableNumber: "C5",
   },
+  {
+    id: "res-4",
+    customerName: "Emily Johnson",
+    date: "Apr 18, 2025",
+    time: "8:00 PM",
+    guests: 4,
+    status: "approved",
+    tableNumber: "B8",
+  },
+  {
+    id: "res-5",
+    customerName: "Michael Brown",
+    date: "Apr 19, 2025",
+    time: "6:30 PM",
+    guests: 6,
+    status: "pending",
+    tableNumber: "C5",
+  },
+  {
+    id: "res-6",
+    customerName: "John Smith",
+    date: "Apr 18, 2025",
+    time: "7:30 PM",
+    guests: 2,
+    status: "pending",
+    tableNumber: "A12",
+  },
 ];
 
 const OwnerDashboard = () => (
@@ -124,29 +145,21 @@ const OwnerDashboard = () => (
     </div>
 
     <div className="container mx-auto px-4 py-6">
+      {/* Inventory at the top */}
+      <div className="mb-10">
+        <Inventory />
+      </div>
+
+      {/* Menu and Reservation in the middle */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <Menu menuItems={menuItems} />
         <Reservation tableReservations={tableReservations} />
       </div>
 
-      {/* Accordion Section */}
-      <Accordion
-        type="single"
-        collapsible
-        className="w-full max-w-6xl mx-auto mt-10"
-      >
-        <AccordionItem value="inventory-staff">
-          <AccordionTrigger className="w-full px-6 py-4 bg-stone-900 text-stone-100 rounded-lg text-xl font-semibold shadow hover:bg-stone-800 transition">
-            Inventory & Staff Management
-          </AccordionTrigger>
-          <AccordionContent className="pt-6 pb-4 px-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Inventory />
-              <Staff />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      {/* Staff at the end */}
+      <div className="mb-6">
+        <Staff />
+      </div>
     </div>
   </div>
 );

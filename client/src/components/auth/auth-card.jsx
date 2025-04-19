@@ -81,7 +81,7 @@ export const AuthModal = ({ isOpen, onClose }) => {
                 </h2>
                 <p className="text-sm text-stone-800 mt-3">
                   Enter your email to get started and access <br /> all the
-                  features of our platform
+                  features of our platform. 
                 </p>
               </div>
 

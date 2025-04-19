@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, XCircle, Edit, Bolt, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, Bolt, ExternalLink } from "lucide-react";
 
 const stone300 = "#d6d3d1";
 
@@ -13,60 +13,50 @@ const Reservation = ({ tableReservations }) => (
     style={{ position: "relative" }}
   >
     <div
-      className="space-y-4 flex-grow overflow-y-auto"
+      className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-grow overflow-y-auto"
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       {tableReservations.map((reservation) => (
         <Card
           key={reservation.id}
-          className="overflow-hidden border-none shadow-none bg-stone-100 p-4 rounded-md"
+          className="rounded-md bg-stone-100 border-none shadow-none overflow-hidden transition-shadow h-[200px] flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="p-4">
+            <div className="flex justify-between items-start">
               <h3 className="font-medium text-stone-900">
                 {reservation.customerName}
               </h3>
-              <p className="text-sm text-stone-600">
-                {reservation.date} · {reservation.time} · {reservation.guests}{" "}
-                guests
-              </p>
-              <p className="text-xs text-stone-500 mt-1">
-                Table: {reservation.tableNumber}
-              </p>
+              <div className="text-stone-900 font-medium">{reservation.time}</div>
             </div>
-            <div className="flex items-center space-x-3">
-              <span
-                className={`px-2 py-1 rounded-full text-xs ${
-                  reservation.status === "approved"
-                    ? "bg-green-100 text-green-800 border border-green-200"
-                    : "bg-amber-100 text-amber-800 border border-amber-200"
-                }`}
-              >
-                {reservation.status === "approved" ? "Confirmed" : "Pending"}
-              </span>
+            <div className="text-xs text-stone-500 mt-1">
+              {reservation.date} · {reservation.guests} guests
+            </div>
+            <div className="text-xs text-stone-500 mt-1">
+              Table: {reservation.tableNumber}
             </div>
           </div>
-          <div className="mt-3 pt-2 border-t border-stone-200 flex justify-end">
-            {reservation.status === "pending" && (
-              <>
-                <Button
-                  size="sm"
-                  className="h-8 bg-green-600 hover:bg-green-700 text-white mr-2"
-                >
-                  Approve <CheckCircle className="ml-1 h-4 w-4" />
+          <div className="p-4 border-t border-stone-200 flex items-center justify-between">
+            <span
+              className={`px-2 py-1 rounded-full text-xs ${
+                reservation.status === "approved"
+                  ? "bg-green-100 text-green-800 border border-green-200"
+                  : "bg-amber-100 text-amber-800 border border-amber-200"
+              }`}
+            >
+              {reservation.status === "approved" ? "Confirmed" : "Pending"}
+            </span>
+            {reservation.status === "pending" ? (
+              <div className="flex gap-1">
+                <Button size="sm" variant="outline" className="h-7 text-xs bg-green-100 hover:bg-green-200 text-green-800 border-green-300">
+                  <CheckCircle className="h-3 w-3 mr-1" /> Accept
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-8 text-red-600 border-red-600 hover:bg-red-50"
-                >
-                  Decline <XCircle className="ml-1 h-4 w-4" />
+                <Button size="sm" variant="outline" className="h-7 text-xs bg-red-100 hover:bg-red-200 text-red-800 border-red-300">
+                  <XCircle className="h-3 w-3 mr-1" /> Decline
                 </Button>
-              </>
-            )}
-            {reservation.status === "approved" && (
-              <Button size="sm" variant="outline" className="h-8">
-                Modify <Edit className="ml-1 h-4 w-4" />
+              </div>
+            ) : (
+              <Button size="sm" variant="outline" className="h-7 text-xs">
+                Edit
               </Button>
             )}
           </div>
@@ -91,8 +81,7 @@ const Reservation = ({ tableReservations }) => (
       <Button className="bg-stone-100 hover:bg-stone-300 text-stone-900 cursor-pointer">
         Manage Tables <Bolt className="ml-1 h-4 w-4" />
       </Button>
-      <Button className="bg-stone-100 hover:bg-stone-300 text-stone-900 cursor-pointer"
-      >
+      <Button className="bg-stone-100 hover:bg-stone-300 text-stone-900 cursor-pointer">
         View All Reservations <ExternalLink className="ml-1 h-4 w-4" />
       </Button>
     </div>
