@@ -1,32 +1,34 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const customerSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: "User",
+    required: true,
   },
   location: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   preferences: {
     type: [String],
-    default: []
+    default: [],
   },
   favoriteRestaurants: {
-    type: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Restaurant'
-    }],
-    default: []
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Restaurant",
+      },
+    ],
+    default: [],
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Customer', customerSchema); 
+module.exports = mongoose.model("Customer", customerSchema);

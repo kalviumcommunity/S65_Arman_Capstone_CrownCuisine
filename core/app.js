@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const config = require('./config');
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const config = require("./config");
 
 // Import routes
-const authRoutes = require('./routes/auth.routes');
-const customerRoutes = require('./routes/customer.routes');
+const authRoutes = require("./routes/auth.routes");
+const customerRoutes = require("./routes/customer.routes");
 
 // Create Express app
 const app = express();
@@ -16,25 +16,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(config.mongoURI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+mongoose
+  .connect(config.mongoURI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Routes
-app.use('/api', authRoutes);
-app.use('/api/customer', customerRoutes);
+app.use("/api", authRoutes);
+app.use("/api/customer", customerRoutes);
 
 // Basic route for testing
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Crown Cuisine API' });
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to Crown Cuisine API" });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ 
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  res.status(500).json({
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
   });
 });
 

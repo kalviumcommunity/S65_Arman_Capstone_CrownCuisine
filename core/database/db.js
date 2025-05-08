@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const config = require('../core/config');
+const mongoose = require("mongoose");
+const config = require("../core/config");
 
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(config.mongoURI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
-    
+
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {

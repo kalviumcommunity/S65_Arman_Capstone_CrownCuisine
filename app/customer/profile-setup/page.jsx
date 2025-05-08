@@ -18,7 +18,7 @@ export default function CustomerProfileSetup() {
     name: "",
     phoneNumber: "",
     otp: "",
-    location: ""
+    location: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -33,27 +33,27 @@ export default function CustomerProfileSetup() {
 
   const validateStep = () => {
     const newErrors = {};
-    
+
     if (step === 1 && !formData.name.trim()) {
       newErrors.name = "Please enter your name";
     }
-    
+
     if (step === 2 && !formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Please enter your phone number";
     } else if (step === 2 && !/^\d{10}$/.test(formData.phoneNumber)) {
       newErrors.phoneNumber = "Please enter a valid 10-digit phone number";
     }
-    
+
     if (step === 3 && !formData.otp.trim()) {
       newErrors.otp = "Please enter the verification code";
     } else if (step === 3 && !/^\d{6}$/.test(formData.otp)) {
       newErrors.otp = "Please enter a valid 6-digit verification code";
     }
-    
+
     if (step === 4 && !formData.location.trim()) {
       newErrors.location = "Please enter your location";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -65,17 +65,17 @@ export default function CustomerProfileSetup() {
 
   const handleSendOTP = async () => {
     if (!validateStep()) return;
-    
+
     setLoading(true);
     try {
-      const response = await fetch('/api/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber: formData.phoneNumber })
+      const response = await fetch("/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: formData.phoneNumber }),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setOtpSent(true);
         setCountdown(30); // 30 seconds cooldown
@@ -91,20 +91,20 @@ export default function CustomerProfileSetup() {
 
   const handleVerifyOTP = async () => {
     if (!validateStep()) return;
-    
+
     setLoading(true);
     try {
-      const response = await fetch('/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+      const response = await fetch("/api/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           phoneNumber: formData.phoneNumber,
-          otp: formData.otp
-        })
+          otp: formData.otp,
+        }),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         nextStep();
       } else {
@@ -119,18 +119,18 @@ export default function CustomerProfileSetup() {
 
   const handleSubmit = async () => {
     if (!validateStep()) return;
-    
+
     setLoading(true);
     try {
-      const response = await fetch('/api/customer/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const response = await fetch("/api/customer/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-      
+
       if (response.ok) {
         // Successfully created profile, redirect to dashboard
-        router.push('/customer/dashboard');
+        router.push("/customer/dashboard");
       } else {
         const data = await response.json();
         setErrors({ submit: data.message || "Failed to create profile" });
@@ -164,7 +164,9 @@ export default function CustomerProfileSetup() {
     <main className="relative z-1 min-h-screen flex flex-col justify-center items-center bg-stone-300 text-stone-950">
       <div className="w-full max-w-md p-8">
         <div className="mb-10 text-center">
-          <h1 className={`${instrumentSerif.className} text-4xl font-medium mb-4`}>
+          <h1
+            className={`${instrumentSerif.className} text-4xl font-medium mb-4`}
+          >
             {step === 1 && "What's your name?"}
             {step === 2 && "Your phone number?"}
             {step === 3 && "Verify your number"}
@@ -180,11 +182,14 @@ export default function CustomerProfileSetup() {
 
         <div className="flex gap-4 justify-between items-center mb-6">
           {[1, 2, 3, 4].map((i) => (
-            <div 
+            <div
               key={i}
               className={`h-2 rounded-full flex-1 transition-colors ${
-                i === step ? 'bg-stone-900' : 
-                i < step ? 'bg-stone-700' : 'bg-stone-400'
+                i === step
+                  ? "bg-stone-900"
+                  : i < step
+                    ? "bg-stone-700"
+                    : "bg-stone-400"
               }`}
             />
           ))}
@@ -202,7 +207,9 @@ export default function CustomerProfileSetup() {
                 placeholder="John Doe"
                 className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12"
               />
-              {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-600 text-sm">{errors.name}</p>
+              )}
             </div>
           )}
 
@@ -218,7 +225,9 @@ export default function CustomerProfileSetup() {
                 type="tel"
                 className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12"
               />
-              {errors.phoneNumber && <p className="text-red-600 text-sm">{errors.phoneNumber}</p>}
+              {errors.phoneNumber && (
+                <p className="text-red-600 text-sm">{errors.phoneNumber}</p>
+              )}
             </div>
           )}
 
@@ -234,12 +243,14 @@ export default function CustomerProfileSetup() {
                 className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12 text-center text-xl tracking-widest"
                 maxLength={6}
               />
-              {errors.otp && <p className="text-red-600 text-sm">{errors.otp}</p>}
-              
+              {errors.otp && (
+                <p className="text-red-600 text-sm">{errors.otp}</p>
+              )}
+
               <div className="flex justify-between items-center mt-4">
                 <p className="text-sm text-stone-600">
-                  {countdown > 0 
-                    ? `Resend code in ${countdown}s` 
+                  {countdown > 0
+                    ? `Resend code in ${countdown}s`
                     : "Didn't receive a code?"}
                 </p>
                 <button
@@ -264,7 +275,9 @@ export default function CustomerProfileSetup() {
                 placeholder="New York, NY"
                 className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12"
               />
-              {errors.location && <p className="text-red-600 text-sm">{errors.location}</p>}
+              {errors.location && (
+                <p className="text-red-600 text-sm">{errors.location}</p>
+              )}
             </div>
           )}
 
@@ -280,9 +293,13 @@ export default function CustomerProfileSetup() {
             {loading ? (
               "Processing..."
             ) : step === 4 ? (
-              <>Finish <Check weight="bold" /></>
+              <>
+                Finish <Check weight="bold" />
+              </>
             ) : (
-              <>Continue <ArrowRight weight="bold" /></>
+              <>
+                Continue <ArrowRight weight="bold" />
+              </>
             )}
           </Button>
         </div>
