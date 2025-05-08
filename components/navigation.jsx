@@ -1,45 +1,74 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Home, ShoppingBag, Menu, Calendar, Users, BarChart } from 'lucide-react'
+import { useState } from "react";
+import {
+  HouseSimple,
+  User,
+  Crown,
+  UserCheck,
+  HeartStraight,
+} from "@phosphor-icons/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
+import { chivoMono } from "@/app/fonts";
 
 export default function Navigation() {
-  const [activeTab, setActiveTab] = useState('dashboard')
-  
+  const [activeTab, setActiveTab] = useState("dashboard");
+
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: <Home size={22} /> },
-    { id: 'orders', label: 'Orders', icon: <ShoppingBag size={22} /> },
-    { id: 'menu', label: 'Menu', icon: <Menu size={22} /> },
-    { id: 'reservations', label: 'Reservations', icon: <Calendar size={22} /> },
-    { id: 'staff', label: 'Staff', icon: <Users size={22} /> },
-    { id: 'analytics', label: 'Analytics', icon: <BarChart size={22} /> }
-  ]
-  
+    {
+      id: "hello",
+      label: "Hello",
+      icon: <HouseSimple size={22} />,
+    },
+    {
+      id: "customers",
+      label: "Customers",
+      icon: <User size={22} />,
+    },
+    {
+      id: "managers",
+      label: "Managers",
+      icon: <Crown size={22} />,
+    },
+    {
+      id: "employees",
+      label: "Employees",
+      icon: <UserCheck size={22} />,
+    },
+    {
+      id: "donations",
+      label: "Donations",
+      icon: <HeartStraight size={22} />,
+    },
+  ];
+
   return (
-    <nav className="fixed top-8 right-8 z-10">
+    <nav className="fixed right-8 top-1/2 transform -translate-y-1/2 z-10">
       <TooltipProvider>
-        <div className="flex gap-4">
-          {tabs.map(tab => (
+        <div className="flex flex-col gap-4 items-center">
+          {tabs.map((tab) => (
             <Tooltip key={tab.id}>
               <TooltipTrigger asChild>
                 <button
                   onClick={() => setActiveTab(tab.id)}
-                  className={`p-2.5 rounded-full transition-all ${
-                    activeTab === tab.id 
-                      ? 'text-gray-800' 
-                      : 'text-gray-500 hover:text-gray-700'
+                  className={`p-2.5 transition-all cursor-pointer ${
+                    activeTab === tab.id
+                      ? "text-stone-700"
+                      : "text-stone-900 hover:text-stone-700"
                   }`}
                 >
                   {tab.icon}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom">
+              <TooltipContent
+                side="left"
+                className={`${chivoMono.className} bg-stone-100 text-stone-900 border-2 border-stone-900 rounded-full px-4 py-2`}
+              >
                 <p>{tab.label}</p>
               </TooltipContent>
             </Tooltip>
@@ -47,5 +76,5 @@ export default function Navigation() {
         </div>
       </TooltipProvider>
     </nav>
-  )
+  );
 }

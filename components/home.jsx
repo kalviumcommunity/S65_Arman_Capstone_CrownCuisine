@@ -1,44 +1,43 @@
+"use client";
+
+import { instrumentSerif } from "@/app/fonts";
+import { ArrowRight } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
   return (
-    <main className="relative z-1 min-h-screen flex flex-col">
-      <div className="mt-auto p-8">
-        <div className="max-w-2xl mb-8 ml-8">
-          <h1 className="text-4xl mb-4 text-stone-800">
-            Streamline Your Restaurant Operations
+    <main className="relative z-1 min-h-screen flex flex-col justify-center items-center text-stone-950">
+      <div className="flex flex-col items-center justify-center h-full w-full">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className={`${instrumentSerif.className} text-8xl font-medium`}>
+            <span className="block">Serve Better.</span>
+            <span className="block">
+              Manage <em className="italic">Smarter.</em>
+            </span>
           </h1>
-          
-          <p className="font-sans text-lg leading-relaxed mb-8 text-stone-600">
+
+          <p className="max-w-lg mx-auto text-md mt-6 mb-8 text-stone-800">
             Manage orders, reservations, staff, and inventory all in one place.
-            Our intuitive dashboard gives you real-time insights to boost efficiency
-            and enhance your customer experience.
+            Get real-time insights to boost efficiency and deliver great
+            service.
           </p>
-          
-          <div className="flex gap-4">
-            <button className="py-3 px-6 bg-stone-800 text-white rounded-lg font-semibold hover:bg-stone-900 transition-colors">
-              Get Started
-            </button>
-            
-            <button className="py-3 px-6 bg-transparent text-stone-800 border-2 border-stone-800 rounded-lg font-semibold hover:bg-stone-100 transition-colors">
-              Watch Demo
-            </button>
-          </div>
-          
-          <div className="flex items-center mt-8">
-            <div className="flex mr-4">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full bg-stone-300 border-2 border-stone-400"
-                  style={{ marginLeft: i > 0 ? '-10px' : '0' }}
-                />
-              ))}
-            </div>
-            <p className="text-stone-600 text-sm">
-              Trusted by 500+ restaurants worldwide
-            </p>
+
+          <div className="flex gap-4 justify-center">
+            <Button
+              variant="outline"
+              className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
+            >
+              Get Started <ArrowRight weight="bold" size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
+            >
+              Learn More <ArrowRight weight="bold" size={16} />
+            </Button>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
