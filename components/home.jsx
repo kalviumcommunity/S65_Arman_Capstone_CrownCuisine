@@ -3,6 +3,7 @@
 import { instrumentSerif } from "@/app/fonts";
 import { ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -23,12 +24,14 @@ export default function Home() {
           </p>
 
           <div className="flex gap-4 justify-center">
-            <Button
-              variant="outline"
-              className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
-            >
-              Get Started <ArrowRight weight="bold" size={16} />
-            </Button>
+            <Link href="/welcome-setup">
+              <Button
+                variant="outline"
+                className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
+              >
+                Get Started <ArrowRight weight="bold" size={16} />
+              </Button>
+            </Link>
             <Button
               variant="outline"
               className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
