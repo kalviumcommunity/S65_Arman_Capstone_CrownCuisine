@@ -29,36 +29,12 @@ const DESCRIPTIONS = [
 export default function CustomerProfileSetup() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
     otp: "",
     location: "",
   });
-  const [errors, setErrors] = useState({});
-
-  const validateStep = () => {
-    const newErrors = {};
-    if (step === 1 && !formData.name.trim()) {
-      newErrors.name = "Please enter your name";
-    }
-    if (step === 2) {
-      if (!formData.phoneNumber.trim()) {
-        newErrors.phoneNumber = "Please enter your phone number";
-      }
-    }
-    if (step === 3) {
-      if (!formData.otp.trim()) {
-        newErrors.otp = "Please enter the verification code";
-      }
-    }
-    if (step === 4 && !formData.location.trim()) {
-      newErrors.location = "Please enter your location";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,45 +45,18 @@ export default function CustomerProfileSetup() {
     setFormData((prev) => ({ ...prev, otp: value }));
   };
 
-  const handleSubmit = async () => {
-    if (!validateStep()) return;
-    setLoading(true);
-    try {
-      const response = await fetch("/api/customer/profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        router.push("/customer/dashboard");
-      } else {
-        const data = await response.json();
-        setErrors({ submit: data.message || "Failed to create profile" });
-      }
-    } catch {
-      setErrors({ submit: "An error occurred. Please try again." });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleNextClick = () => {
-    if (loading) return;
-    if (step === 1) {
-      if (validateStep()) setStep(2);
-    } else if (step === 2) {
-      if (validateStep()) setStep(3);
-    } else if (step === 3) {
-      if (validateStep()) setStep(4);
-    } else if (step === 4) {
-      handleSubmit();
+    if (step < 4) {
+      setStep(step + 1);
+    } else {
+      // Temporarily just save to localStorage and redirect
+      localStorage.setItem("customerProfile", JSON.stringify(formData));
+      router.push("/customer/dashboard");
     }
   };
 
   const handleBackClick = () => {
-    if (loading) return;
     if (step > 1) {
-      setErrors({});
       setStep(step - 1);
     }
   };
@@ -116,11 +65,9 @@ export default function CustomerProfileSetup() {
 
   return (
     <main className="relative z-1 min-h-screen flex flex-col justify-center items-center bg-stone-300 text-stone-950">
-      <div className="w-full max-w-2xl p-8">
-        {/* Progress Bar at the top */}
-        <Progress value={progressValue} className="h-2 mb-10 w-1/2 mx-auto" />
+      <div className="w-full max-w-3xl p-8">
+        <Progress value={progressValue} className="h-3 mb-10 w-1/2 mx-auto" />
 
-        {/* Title and Description */}
         <div className="mb-10 text-center">
           <h1
             className={`${instrumentSerif.className} text-6xl font-medium mb-4`}
@@ -138,11 +85,8 @@ export default function CustomerProfileSetup() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12 w-72 mx-auto text-center"
+                className="border-none bg-stone-100 focus:border-stone-900 h-12 w-72 mx-auto text-center"
               />
-              {errors.name && (
-                <p className="text-red-600 text-sm">{errors.name}</p>
-              )}
             </div>
           )}
 
@@ -154,11 +98,8 @@ export default function CustomerProfileSetup() {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 type="tel"
-                className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12 w-72 mx-auto text-center"
+                className="border-none bg-stone-100 focus:border-stone-900 h-12 w-72 mx-auto text-center"
               />
-              {errors.phoneNumber && (
-                <p className="text-red-600 text-sm">{errors.phoneNumber}</p>
-              )}
             </div>
           )}
 
@@ -171,36 +112,16 @@ export default function CustomerProfileSetup() {
                   onChange={handleOtpChange}
                 >
                   <InputOTPGroup>
-                    <InputOTPSlot
-                      index={0}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
-                    <InputOTPSlot
-                      index={1}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
-                    <InputOTPSlot
-                      index={2}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
-                    <InputOTPSlot
-                      index={3}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
-                    <InputOTPSlot
-                      index={4}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
-                    <InputOTPSlot
-                      index={5}
-                      className="border-none bg-stone-100 h-12 w-12 text-xl"
-                    />
+                    {[...Array(6)].map((_, i) => (
+                      <InputOTPSlot
+                        key={i}
+                        index={i}
+                        className="border-none bg-stone-100 h-12 w-12 text-xl"
+                      />
+                    ))}
                   </InputOTPGroup>
                 </InputOTP>
               </div>
-              {errors.otp && (
-                <p className="text-red-600 text-sm text-center">{errors.otp}</p>
-              )}
             </div>
           )}
 
@@ -211,33 +132,25 @@ export default function CustomerProfileSetup() {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="border-2 border-stone-400 bg-white focus:border-stone-900 h-12 w-72 mx-auto text-center"
+                className="border-none bg-stone-100 focus:border-stone-900 h-12 w-72 mx-auto text-center"
               />
-              {errors.location && (
-                <p className="text-red-600 text-sm">{errors.location}</p>
-              )}
             </div>
-          )}
-
-          {errors.submit && (
-            <p className="text-red-600 text-sm mt-4">{errors.submit}</p>
           )}
 
           <div className="flex justify-center items-center gap-4 mt-8">
             <button
               onClick={handleBackClick}
-              disabled={loading || step === 1}
+              disabled={step === 1}
               type="button"
-              className={`w-12 h-12 flex items-center justify-center rounded-full border-2 border-stone-400 bg-stone-100 text-stone-800 hover:bg-stone-200 transition-colors shadow-none disabled:bg-stone-200 disabled:text-stone-600`}
+              className="w-12 h-12 flex items-center justify-center rounded-full border-none bg-stone-100 text-stone-800 hover:bg-stone-200 transition-colors shadow-none disabled:bg-stone-200 disabled:text-stone-600 cursor-pointer"
               aria-label="Back"
             >
               <ArrowLeft size={20} weight="bold" />
             </button>
             <button
               onClick={handleNextClick}
-              disabled={loading}
               type="button"
-              className={`w-12 h-12 flex items-center justify-center rounded-full border-2 border-stone-400 bg-stone-100 text-stone-800 hover:bg-stone-200 transition-colors shadow-none disabled:bg-stone-200 disabled:text-stone-600`}
+              className="w-12 h-12 flex items-center justify-center rounded-full border-none bg-stone-100 text-stone-800 hover:bg-stone-200 transition-colors shadow-none disabled:bg-stone-200 disabled:text-stone-600 cursor-pointer"
               aria-label="Continue"
             >
               <ArrowRight size={20} weight="bold" />
