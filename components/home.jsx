@@ -7,10 +7,12 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="relative z-1 min-h-screen flex flex-col justify-center items-center text-stone-950">
+    <main className="relative z-1 min-h-screen flex flex-col justify-center items-center">
       <div className="flex flex-col items-center justify-center h-full w-full">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className={`${instrumentSerif.className} text-8xl font-medium`}>
+          <h1
+            className={`${instrumentSerif.className} text-8xl font-medium text-stone-900`}
+          >
             <span className="block">Serve Better.</span>
             <span className="block">
               Manage <em className="italic">Smarter.</em>
@@ -27,14 +29,14 @@ export default function Home() {
             <Link href="/welcome-setup">
               <Button
                 variant="outline"
-                className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
+                className="border-none rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
               >
                 Get Started <ArrowRight weight="bold" size={16} />
               </Button>
             </Link>
             <Button
               variant="outline"
-              className="border-2 border-stone-900 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
+              className="border-none rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-900 cursor-pointer !px-6 !py-6"
             >
               Learn More <ArrowRight weight="bold" size={16} />
             </Button>
