@@ -1,5 +1,5 @@
 import "./globals.css";
-import { instrumentSans } from "./fonts";
+import { funnelSans } from "./fonts";
 
 export const metadata = {
   title: "Crown Cuisine - Restaurant Operations Suite",
@@ -13,11 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={[
-          instrumentSans.className,
-          "antialiased",
-          "bg-stone-300",
-        ].join(" ")}
+        className={[funnelSans.className, "antialiased", "bg-stone-300"].join(
+          " ",
+        )}
       >
         {children}
       </body>

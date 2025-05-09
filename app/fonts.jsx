@@ -50,3 +50,20 @@ export const chivoMono = localFont({
   display: "swap",
   preload: true,
 });
+
+export const funnelSans = localFont({
+  src: [
+    {
+      path: "./fonts/FunnelSans-VariableFont_wght.ttf",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "./fonts/FunnelSans-Italic-VariableFont_wght.ttf",
+      weight: "100 900",
+      style: "italic",
+    },
+  ],
+  display: "swap",
+  preload: true,
+});

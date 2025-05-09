@@ -5,10 +5,11 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import WelcomeSetupModal from "@/components/welcome-setup";
+import WelcomeSetupModal from "@/components/landing/welcome-setup";
 import { motion } from "framer-motion";
+import Preview from "@/components/landing/preview";
 
-export default function Home() {
+export default function Hero() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,10 +22,11 @@ export default function Home() {
   };
 
   return (
-    <main className="relative z-1 min-h-screen flex flex-col justify-center items-center">
-      <div className="flex flex-col items-center justify-center h-full w-full">
+    <main className="relative z-1 w-full flex flex-col items-center">
+      {/* Hero Section */}
+      <section className="w-full max-w-5xl px-4 pt-20">
         <motion.div
-          className="max-w-3xl mx-auto text-center"
+          className="text-center"
           variants={fadeIn}
           initial="hidden"
           animate="visible"
@@ -38,28 +40,34 @@ export default function Home() {
             </span>
           </h1>
           <p className="max-w-lg mx-auto text-md mb-6 text-stone-800">
-            Manage orders, reservations, staff, and inventory all in one place.
-            Get real-time insights to boost efficiency and deliver great
-            service.
+            Manage orders, reservations, staff, and inventory all in one
+            place. Get real-time insights to boost efficiency and deliver
+            great service.
           </p>
           <div className="flex gap-4 justify-center">
             <Button
               variant="outline"
-              className="border-none rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-800 cursor-pointer !px-6 !py-6"
+              className="border-3 border-stone-400 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-800 cursor-pointer !px-8 !py-6"
               onClick={() => setIsModalOpen(true)}
             >
               Get Started <ArrowRight weight="bold" size={16} />
             </Button>
             <Button
               variant="outline"
-              className="border-none rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-800 cursor-pointer !px-6 !py-6"
+              className="border-3 border-stone-400 rounded-full bg-stone-100 hover:bg-stone-200 hover:text-stone-800 cursor-pointer !px-8 !py-6"
               onClick={() => router.push("/about")}
             >
               Learn More <ArrowRight weight="bold" size={16} />
             </Button>
           </div>
         </motion.div>
-      </div>
+      </section>
+
+      {/* Demo Visual Section */}
+      <section className="w-full max-w-6xl px-8 mt-12">
+        <Preview />
+      </section>
+
       <WelcomeSetupModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

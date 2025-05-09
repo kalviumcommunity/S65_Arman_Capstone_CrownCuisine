@@ -1,178 +1,141 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { instrumentSerif } from "@/app/fonts";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import Inventory from "@/components/manager/Inventory";
+import Staff from "@/components/manager/Staff";
+import Menu from "@/components/manager/Menu";
+import TableReservation from "@/components/manager/TableReservation";
+import { Package, User, Hamburger, CalendarCheck, GearSix } from "@phosphor-icons/react";
+import { funnelSans, instrumentSerif } from "@/app/fonts";
 import {
-  UserCircle,
-  Storefront,
-  Phone,
-  ForkKnife,
-  Info,
-  MapPin,
-} from "@phosphor-icons/react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.7, ease: "easeInOut" },
-  },
-};
-
-const InfoItem = ({ label, value, icon, isBlock = false }) => (
-  <div
-    className={`flex ${
-      isBlock ? "flex-col items-start" : "flex-col sm:flex-row sm:items-center"
-    } gap-1 sm:gap-2 py-2 border-b border-stone-200 last:border-b-0`}
-  >
-    <dt className="text-sm font-semibold text-stone-700 w-full sm:w-48 flex items-center gap-2 shrink-0">
-      {icon}
-      {label}:
-    </dt>
-    <dd className="text-md text-stone-800 break-words">
-      {value || "Not provided"}
-    </dd>
-  </div>
-);
+const tabs = [
+  { id: "inventory", label: "Inventory", icon: Package },
+  { id: "staff", label: "Staff", icon: User },
+  { id: "menu", label: "Menu", icon: Hamburger },
+  { id: "reservations", label: "Table Reservations", icon: CalendarCheck },
+  { id: "settings", label: "Settings", icon: GearSix },
+];
 
 export default function ManagerDashboard() {
-  const router = useRouter();
-  const [managerProfile, setManagerProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("inventory");
+  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef(null);
+  const resizeRef = useRef(null);
+
+  const ActiveComponent = {
+    inventory: Inventory,
+    staff: Staff,
+    menu: Menu,
+    reservations: TableReservation,
+    settings: () => <div>Settings Component</div>,
+  }[activeTab];
+
+  // Load saved sidebar width on initial render
+  useEffect(() => {
+    const savedWidth = localStorage.getItem("sidebarWidth");
+    if (savedWidth) {
+      setSidebarWidth(parseInt(savedWidth, 10));
+    }
+  }, []);
+
+  const startResizing = (mouseDownEvent) => {
+    setIsResizing(true);
+  };
+
+  const stopResizing = () => {
+    setIsResizing(false);
+  };
+
+  const resize = (mouseMoveEvent) => {
+    if (isResizing) {
+      const newWidth = mouseMoveEvent.clientX;
+      if (newWidth > 180 && newWidth < 400) {
+        setSidebarWidth(newWidth);
+        localStorage.setItem("sidebarWidth", newWidth.toString());
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      setLoading(true);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const storedProfile = localStorage.getItem("restaurantProfile");
-        if (storedProfile) {
-          setManagerProfile(JSON.parse(storedProfile));
-        } else {
-          console.warn("Manager profile not found.");
-        }
-      } catch (error) {
-        console.error("Failed to load manager profile:", error);
-      } finally {
-        setLoading(false);
-      }
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
     };
-
-    fetchProfileData();
-  }, [router]);
-
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex justify-center items-center bg-stone-300 text-stone-950">
-  //       <p className={`${instrumentSerif.className} text-2xl`}>
-  //         Loading Dashboard...
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  }, [isResizing]);
 
   return (
-    <motion.main
-      className="relative z-1 min-h-screen flex flex-col items-center bg-stone-300 text-stone-950 p-4 md:p-8"
-      variants={fadeIn}
-      initial="hidden"
-      animate="visible"
+    <div
+      className={`flex h-screen overflow-hidden ${funnelSans.className}`}
+      onMouseMove={resize}
+      onMouseUp={stopResizing}
     >
-      <div className="w-full max-w-3xl bg-stone-100 shadow-xl rounded-lg p-6 md:p-10">
-        <header className="mb-8 text-center border-b border-stone-300 pb-6">
+      <aside
+        ref={sidebarRef}
+        className="bg-stone-800 text-stone-100 relative flex flex-col"
+        style={{ width: `${sidebarWidth}px`, minWidth: `${sidebarWidth}px` }}
+      >
+        <div className="flex justify-center p-8">
           <h1
-            className={`${instrumentSerif.className} text-4xl md:text-5xl font-medium text-stone-900`}
+            className={`${instrumentSerif.className} text-2xl mb-4 mt-4 text-stone-100 text-center`}
           >
-            Welcome, {managerProfile?.name || "Manager"}!
+            Crown <em className="italic">Cuisine</em>
           </h1>
-          <p className="text-stone-700 mt-2">
-            Here's an overview of your restaurant's details.
-          </p>
-        </header>
+        </div>
 
-        {managerProfile ? (
-          <div className="space-y-8">
-            <section>
-              <h2
-                className={`${instrumentSerif.className} text-2xl font-medium text-stone-800 mb-4 flex items-center gap-2`}
-              >
-                <Storefront
-                  size={28}
-                  weight="fill"
-                  className="text-stone-700"
-                />
-                Restaurant Information
-              </h2>
-              <div className="bg-stone-50 p-4 rounded-md shadow-sm">
-                <InfoItem
-                  label="Restaurant Name"
-                  value={managerProfile.restaurantName}
-                />
-                <InfoItem
-                  label="Phone Number"
-                  value={managerProfile.phoneNumber}
-                  icon={<Phone size={20} className="text-stone-600" />}
-                />
-                <InfoItem
-                  label="Cuisine Specialty"
-                  value={managerProfile.cuisineSpecialty}
-                  icon={<ForkKnife size={20} className="text-stone-600" />}
-                />
-                <InfoItem
-                  label="Description"
-                  value={managerProfile.description}
-                  isBlock={true}
-                  icon={<Info size={20} className="text-stone-600" />}
-                />
-                <InfoItem
-                  label="Location"
-                  value={managerProfile.location}
-                  icon={<MapPin size={20} className="text-stone-600" />}
-                />
-              </div>
-            </section>
+        <nav className="flex flex-col w-full items-center">
+          <TooltipProvider>
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              const buttonWidth = sidebarWidth - 48; // Full width minus padding
+              
+              return (
+                <Tooltip key={tab.id}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center justify-center mb-6 bg-stone-900 transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-stone-950 text-stone-100"
+                          : "text-stone-100 hover:bg-stone-900/50"
+                      } rounded-lg`}
+                      style={{ width: `${buttonWidth}px`, height: '100px' }}
+                    >
+                      <Icon size={24} weight="regular" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{tab.label}</p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </TooltipProvider>
+        </nav>
 
-            <section>
-              <h2
-                className={`${instrumentSerif.className} text-2xl font-medium text-stone-800 mb-4 flex items-center gap-2`}
-              >
-                <UserCircle
-                  size={28}
-                  weight="fill"
-                  className="text-stone-700"
-                />
-                Your Profile
-              </h2>
-              <div className="bg-stone-50 p-4 rounded-md shadow-sm">
-                <InfoItem label="Your Name" value={managerProfile.name} />
-              </div>
-            </section>
+        <div
+          ref={resizeRef}
+          className="absolute top-0 right-0 w-1 h-full cursor-ew-resize bg-stone-700 opacity-0 hover:opacity-100"
+          onMouseDown={startResizing}
+        />
+      </aside>
 
-            <section className="mt-10 text-center">
-              <button
-                onClick={() => router.push("/manager/restaurant-setup")}
-                className="bg-stone-800 hover:bg-stone-900 text-white font-medium py-3 px-6 rounded-lg transition-colors"
-              >
-                Edit Restaurant Profile
-              </button>
-            </section>
+      <main className="flex-1 overflow-y-auto bg-stone-300">
+        <div className="p-12">
+          <div className="bg-stone-100 rounded-xl shadow-sm p-6">
+            <ActiveComponent />
           </div>
-        ) : (
-          <div className="text-center py-10">
-            <p className="text-stone-700 text-lg mb-4">
-              Could not load restaurant profile data.
-            </p>
-            <button
-              onClick={() => router.push("/manager/restaurant-setup")}
-              className="bg-stone-800 hover:bg-stone-900 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Setup Your Restaurant
-            </button>
-          </div>
-        )}
-      </div>
-    </motion.main>
+        </div>
+      </main>
+    </div>
   );
 }

@@ -1,11 +1,9 @@
-import Home from "../components/home";
-import Navigation from "../components/navigation";
+import Hero from "../components/landing/hero";
 
 export default function Page() {
   return (
-    <>
-      {/* <Navigation /> */}
-      <Home />
-    </>
+    <div className="flex flex-col items-center justify-center">
+      <Hero />
+    </div>
   );
 }
