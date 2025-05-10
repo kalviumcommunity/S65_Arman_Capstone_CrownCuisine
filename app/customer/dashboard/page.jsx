@@ -1,178 +1,202 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { instrumentSerif } from "@/app/fonts";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect, Fragment } from "react";
+import Overview from "@/components/customer/overview";
+import Search from "@/components/customer/search";
+import Reservations from "@/components/customer/reservation";
+import Favorites from "@/components/customer/favourite";
+import Offers from "@/components/customer/offer";
+import Profile from "@/components/customer/account";
+import Settings from "@/components/customer/setting";
+import Questions from "@/components/customer/questions";
 import {
-  UserCircle,
-  Phone,
-  MapPin,
-  Ticket,
+  MagnifyingGlass,
+  CalendarPlus,
+  ClockCounterClockwise,
   Heart,
+  Star,
+  Ticket,
+  User,
+  GearSix,
+  Question,
+  CaretDown,
+  HouseSimple,
 } from "@phosphor-icons/react";
+import { funnelSans, instrumentSerif } from "@/app/fonts";
+import { Separator } from "@/components/ui/separator";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.7, ease: "easeInOut" },
+const tabGroups = [
+  {
+    heading: "Explore",
+    tabs: [
+      { id: "overview", label: "Overview", icon: HouseSimple },
+      { id: "search", label: "Search Restaurants", icon: MagnifyingGlass },
+      { id: "popular", label: "Popular Ones", icon: Star },
+    ],
   },
-};
-
-const InfoItem = ({ label, value, icon, isBlock = false }) => (
-  <div
-    className={`flex ${
-      isBlock ? "flex-col items-start" : "flex-col sm:flex-row sm:items-center"
-    } gap-1 sm:gap-2 py-2 border-b border-stone-200 last:border-b-0`}
-  >
-    <dt className="text-sm font-semibold text-stone-700 w-full sm:w-48 flex items-center gap-2 shrink-0">
-      {icon}
-      {label}:
-    </dt>
-    <dd className="text-md text-stone-800 break-words">
-      {value || "Not provided"}
-    </dd>
-  </div>
-);
+  {
+    heading: "Reservations",
+    tabs: [
+      { id: "reservation", label: "Your Reservations", icon: CalendarPlus },
+      { id: "previous", label: "Previous Ones", icon: ClockCounterClockwise },
+    ],
+  },
+  {
+    heading: "Favorites",
+    tabs: [
+      { id: "restaurants", label: "Restaurants", icon: Heart },
+      { id: "menus", label: "Favourite Menus", icon: Star },
+    ],
+  },
+  {
+    heading: "Offers",
+    tabs: [
+      { id: "offers", label: "Saved Offers", icon: Ticket },
+    ],
+  },
+  {
+    heading: "Account",
+    tabs: [
+      { id: "settings", label: "Settings", icon: GearSix },
+      { id: "profile", label: "Your Account", icon: User },
+      { id: "questions", label: "Got Questions?", icon: Question },
+    ],
+  },
+];
 
 export default function CustomerDashboard() {
-  const router = useRouter();
-  const [customerProfile, setCustomerProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
+  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef(null);
+
+  const initialCollapsed = tabGroups.reduce((acc, grp) => ((acc[grp.heading] = false), acc), {});
+  const [collapsedGroups, setCollapsedGroups] = useState(initialCollapsed);
+
+  const ActiveComponent = {
+    overview: Overview,
+    search: Search,
+    popular: Search,
+    reservation: Reservations,
+    previous: Reservations,
+    restaurants: Favorites,
+    menus: Favorites,
+    offers: Offers,
+    profile: Profile,
+    settings: Settings,
+    questions: Questions,
+  }[activeTab];
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      setLoading(true);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const storedProfile = localStorage.getItem("customerProfile");
-        if (storedProfile) {
-          setCustomerProfile(JSON.parse(storedProfile));
-        } else {
-          console.warn("Customer profile not found.");
-        }
-      } catch (error) {
-        console.error("Failed to load customer profile:", error);
-      } finally {
-        setLoading(false);
-      }
+    const saved = localStorage.getItem("customerSidebarWidth");
+    if (saved) setSidebarWidth(Number(saved));
+  }, []);
+
+  const startResizing = () => setIsResizing(true);
+  const stopResizing = () => setIsResizing(false);
+
+  const resize = (e) => {
+    if (!isResizing) return;
+    const newW = e.clientX;
+    if (newW > 180 && newW < 400) {
+      setSidebarWidth(newW);
+      localStorage.setItem("customerSidebarWidth", newW.toString());
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
     };
+  }, [isResizing]);
 
-    fetchProfileData();
-  }, [router]);
-
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex justify-center items-center bg-stone-300 text-stone-950">
-  //       <p className={`${instrumentSerif.className} text-2xl`}>
-  //         Loading Dashboard...
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  const toggleGroup = (heading) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [heading]: !prev[heading],
+    }));
+  };
 
   return (
-    <motion.main
-      className="relative z-1 min-h-screen flex flex-col items-center bg-stone-300 text-stone-950 p-4 md:p-8"
-      variants={fadeIn}
-      initial="hidden"
-      animate="visible"
+    <div
+      className={`${funnelSans.className} flex h-screen overflow-hidden`}
+      onMouseUp={stopResizing}
     >
-      <div className="w-full max-w-3xl bg-stone-100 shadow-xl rounded-lg p-6 md:p-10">
-        <header className="mb-8 text-center border-b border-stone-300 pb-6">
-          <h1
-            className={`${instrumentSerif.className} text-4xl md:text-5xl font-medium text-stone-900`}
-          >
-            Welcome, {customerProfile?.name || "Customer"}!
+      <aside
+        ref={sidebarRef}
+        className="bg-stone-800 text-stone-100 flex flex-col relative"
+        style={{ width: sidebarWidth, minWidth: sidebarWidth }}
+      >
+        <div className="p-6 flex justify-center">
+          <h1 className={`${instrumentSerif.className} text-2xl`}>
+            Crown <em className="italic">Cuisine</em>
           </h1>
-          <p className="text-stone-700 mt-2">
-            Manage your profile and dining experiences.
-          </p>
-        </header>
+        </div>
 
-        {customerProfile ? (
-          <div className="space-y-8">
-            <section>
-              <h2
-                className={`${instrumentSerif.className} text-2xl font-medium text-stone-800 mb-4 flex items-center gap-2`}
-              >
-                <UserCircle
-                  size={28}
-                  weight="fill"
-                  className="text-stone-700"
-                />
-                Your Profile
-              </h2>
-              <div className="bg-stone-50 p-4 rounded-md shadow-sm">
-                <InfoItem label="Full Name" value={customerProfile.name} />
-                <InfoItem
-                  label="Phone Number"
-                  value={customerProfile.phoneNumber}
-                  icon={<Phone size={20} className="text-stone-600" />}
-                />
-                <InfoItem
-                  label="Your Location"
-                  value={customerProfile.location}
-                  icon={<MapPin size={20} className="text-stone-600" />}
-                />
-              </div>
-            </section>
-
-            <section>
-              <h2
-                className={`${instrumentSerif.className} text-2xl font-medium text-stone-800 mb-4 flex items-center gap-2`}
-              >
-                <Ticket size={28} weight="fill" className="text-stone-700" />
-                My Reservations
-              </h2>
-              <div className="bg-stone-50 p-6 rounded-md shadow-sm text-center">
-                <p className="text-stone-600 mb-3">
-                  You have no upcoming reservations.
-                </p>
-                <button className="bg-stone-700 hover:bg-stone-800 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                  Find a Restaurant
-                </button>
-              </div>
-            </section>
-
-            <section>
-              <h2
-                className={`${instrumentSerif.className} text-2xl font-medium text-stone-800 mb-4 flex items-center gap-2`}
-              >
-                <Heart size={28} weight="fill" className="text-stone-700" />
-                Favorite Restaurants
-              </h2>
-              <div className="bg-stone-50 p-6 rounded-md shadow-sm text-center">
-                <p className="text-stone-600">
-                  You haven't favorited any restaurants yet.
-                </p>
-              </div>
-            </section>
-
-            <section className="mt-10 text-center">
+        <nav className="flex-1 overflow-y-auto px-4">
+          {tabGroups.map((group, idx) => (
+            <Fragment key={group.heading}>
               <button
-                onClick={() => router.push("/customer/profile-setup")} // Or an edit page
-                className="bg-stone-800 hover:bg-stone-900 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+                onClick={() => toggleGroup(group.heading)}
+                className="w-full flex items-center justify-between mt-4 mb-2 px-2 text-xs text-stone-400 uppercase hover:text-stone-300 transition-colors cursor-pointer"
               >
-                Edit Your Profile
+                <span>{group.heading}</span>
+                <CaretDown
+                  size={12}
+                  weight="bold"
+                  className={`transition-transform duration-200 ${
+                    collapsedGroups[group.heading] ? "-rotate-90" : "rotate-0"
+                  }`}
+                />
               </button>
-            </section>
+
+              {!collapsedGroups[group.heading] && (
+                <div>
+                  {group.tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex items-center w-full px-4 py-3 mb-1 rounded-full transition-colors cursor-pointer ${
+                          isActive
+                            ? "bg-stone-900 text-stone-100"
+                            : "hover:bg-stone-900/50 text-stone-100"
+                        }`}
+                        title={tab.label}
+                      >
+                        <Icon size={16} className="mr-2 flex-shrink-0" />
+                        <span className="text-xs truncate">{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {idx < tabGroups.length - 1 && (
+                <Separator className="my-4 bg-stone-700" />
+              )}
+            </Fragment>
+          ))}
+        </nav>
+
+        <div
+          className="absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-stone-700 opacity-0 hover:opacity-100 transition-opacity"
+          onMouseDown={startResizing}
+        />
+      </aside>
+
+      <main className="flex-1 overflow-y-auto bg-stone-800">
+        <div className="p-3">
+          <div className="bg-stone-300 rounded-lg p-6">
+            <ActiveComponent />
           </div>
-        ) : (
-          <div className="text-center py-10">
-            <p className="text-stone-700 text-lg mb-4">
-              Could not load your profile data.
-            </p>
-            <button
-              onClick={() => router.push("/customer/profile-setup")}
-              className="bg-stone-800 hover:bg-stone-900 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Complete Your Profile
-            </button>
-          </div>
-        )}
-      </div>
-    </motion.main>
+        </div>
+      </main>
+    </div>
   );
 }
