@@ -66,8 +66,22 @@ const reportsList = [
 ];
 
 // Filters
-const categories = ["All", "Sales", "Inventory", "HR", "Menu", "Finance", "Feedback"];
-const timePeriods = ["Last 30 days", "Last 90 days", "Last 6 months", "Last year", "Custom"];
+const categories = [
+  "All",
+  "Sales",
+  "Inventory",
+  "HR",
+  "Menu",
+  "Finance",
+  "Feedback",
+];
+const timePeriods = [
+  "Last 30 days",
+  "Last 90 days",
+  "Last 6 months",
+  "Last year",
+  "Custom",
+];
 
 export default function Report() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -75,13 +89,16 @@ export default function Report() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Filter reports based on selected category
-  const filteredReports = activeCategory === "All" 
-    ? reportsList 
-    : reportsList.filter(report => report.category === activeCategory);
+  const filteredReports =
+    activeCategory === "All"
+      ? reportsList
+      : reportsList.filter((report) => report.category === activeCategory);
 
   return (
     <div>
-      <h2 className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}>
+      <h2
+        className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}
+      >
         <ChartPieSlice size={24} weight="fill" className="text-stone-700" />
         Sales & Reports
       </h2>
@@ -112,9 +129,12 @@ export default function Report() {
             >
               <CalendarBlank size={16} />
               <span>{activePeriod}</span>
-              <CaretDown size={12} className={`transition-transform ${isCalendarOpen ? "rotate-180" : ""}`} />
+              <CaretDown
+                size={12}
+                className={`transition-transform ${isCalendarOpen ? "rotate-180" : ""}`}
+              />
             </button>
-            
+
             {isCalendarOpen && (
               <div className="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-lg z-10 py-1 border border-stone-200">
                 {timePeriods.map((period) => (
@@ -138,10 +158,13 @@ export default function Report() {
           </div>
 
           <div className="relative">
-            <MagnifyingGlass size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400" />
-            <input 
-              type="text" 
-              placeholder="Search reports..." 
+            <MagnifyingGlass
+              size={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
+            />
+            <input
+              type="text"
+              placeholder="Search reports..."
               className="pl-9 pr-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-stone-500"
             />
           </div>
@@ -161,18 +184,33 @@ export default function Report() {
         <table className="w-full min-w-full">
           <thead>
             <tr className="bg-stone-50 border-b border-stone-200">
-              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Report Name</th>
-              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Period</th>
-              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Category</th>
-              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Generated</th>
-              <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">Actions</th>
+              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                Report Name
+              </th>
+              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                Period
+              </th>
+              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                Category
+              </th>
+              <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                Generated
+              </th>
+              <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {filteredReports.map((report) => (
-              <tr key={report.id} className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50">
+              <tr
+                key={report.id}
+                className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50"
+              >
                 <td className="py-4 px-4">
-                  <div className="font-medium text-stone-800">{report.title}</div>
+                  <div className="font-medium text-stone-800">
+                    {report.title}
+                  </div>
                   <div className="text-xs text-stone-500">{report.size}</div>
                 </td>
                 <td className="py-4 px-4 text-stone-700">{report.period}</td>
@@ -181,16 +219,27 @@ export default function Report() {
                     {report.category}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-stone-700">{report.generatedOn}</td>
+                <td className="py-4 px-4 text-stone-700">
+                  {report.generatedOn}
+                </td>
                 <td className="py-4 px-4 text-right">
                   <div className="flex justify-end gap-2">
-                    <button className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200" title="Download PDF">
+                    <button
+                      className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200"
+                      title="Download PDF"
+                    >
                       <FilePdf size={16} />
                     </button>
-                    <button className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200" title="Download CSV">
+                    <button
+                      className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200"
+                      title="Download CSV"
+                    >
                       <FileCsv size={16} />
                     </button>
-                    <button className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200" title="Print Report">
+                    <button
+                      className="p-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200"
+                      title="Print Report"
+                    >
                       <Printer size={16} />
                     </button>
                   </div>
@@ -203,11 +252,15 @@ export default function Report() {
 
       {/* Quick Reports Section */}
       <div className="mt-8">
-        <h3 className="text-lg font-medium text-stone-800 mb-4">Quick Reports</h3>
+        <h3 className="text-lg font-medium text-stone-800 mb-4">
+          Quick Reports
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-white p-4 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
             <h4 className="text-stone-800 font-medium mb-2">Today's Sales</h4>
-            <p className="text-stone-500 text-sm mb-3">Quick overview of today's transactions</p>
+            <p className="text-stone-500 text-sm mb-3">
+              Quick overview of today's transactions
+            </p>
             <button className="flex items-center gap-1 text-sm text-stone-700 hover:text-stone-900">
               <Download size={14} />
               <span>Download</span>
@@ -215,15 +268,21 @@ export default function Report() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
             <h4 className="text-stone-800 font-medium mb-2">Weekly Summary</h4>
-            <p className="text-stone-500 text-sm mb-3">Week-to-date performance metrics</p>
+            <p className="text-stone-500 text-sm mb-3">
+              Week-to-date performance metrics
+            </p>
             <button className="flex items-center gap-1 text-sm text-stone-700 hover:text-stone-900">
               <Download size={14} />
               <span>Download</span>
             </button>
           </div>
           <div className="bg-white p-4 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
-            <h4 className="text-stone-800 font-medium mb-2">Inventory Status</h4>
-            <p className="text-stone-500 text-sm mb-3">Current inventory levels and alerts</p>
+            <h4 className="text-stone-800 font-medium mb-2">
+              Inventory Status
+            </h4>
+            <p className="text-stone-500 text-sm mb-3">
+              Current inventory levels and alerts
+            </p>
             <button className="flex items-center gap-1 text-sm text-stone-700 hover:text-stone-900">
               <Download size={14} />
               <span>Download</span>

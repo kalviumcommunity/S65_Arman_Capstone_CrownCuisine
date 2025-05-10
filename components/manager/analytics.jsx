@@ -2,14 +2,14 @@
 
 import React from "react";
 import { instrumentSerif } from "@/app/fonts";
-import { 
-  ChartBar, 
-  TrendUp, 
-  TrendDown, 
-  Storefront, 
+import {
+  ChartBar,
+  TrendUp,
+  TrendDown,
+  Storefront,
   CurrencyDollar,
   Users,
-  Clock
+  Clock,
 } from "@phosphor-icons/react";
 
 // This would be replaced with actual chart components in a real app
@@ -18,7 +18,9 @@ const LineChartPlaceholder = () => (
     <div className="flex flex-col items-center gap-2">
       <ChartBar size={32} className="text-stone-400" />
       <p className="text-stone-500 text-sm">Line Chart Visualization</p>
-      <p className="text-stone-400 text-xs">(Chart library would be integrated here)</p>
+      <p className="text-stone-400 text-xs">
+        (Chart library would be integrated here)
+      </p>
     </div>
   </div>
 );
@@ -28,7 +30,9 @@ const BarChartPlaceholder = () => (
     <div className="flex flex-col items-center gap-2">
       <ChartBar size={32} className="text-stone-400" />
       <p className="text-stone-500 text-sm">Bar Chart Visualization</p>
-      <p className="text-stone-400 text-xs">(Chart library would be integrated here)</p>
+      <p className="text-stone-400 text-xs">
+        (Chart library would be integrated here)
+      </p>
     </div>
   </div>
 );
@@ -38,7 +42,9 @@ const PieChartPlaceholder = () => (
     <div className="flex flex-col items-center gap-2">
       <ChartBar size={32} className="text-stone-400" />
       <p className="text-stone-500 text-sm">Pie Chart Visualization</p>
-      <p className="text-stone-400 text-xs">(Chart library would be integrated here)</p>
+      <p className="text-stone-400 text-xs">
+        (Chart library would be integrated here)
+      </p>
     </div>
   </div>
 );
@@ -95,11 +101,13 @@ const topSellingItems = [
 export default function Analytics() {
   return (
     <div>
-      <h2 className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}>
+      <h2
+        className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}
+      >
         <ChartBar size={24} weight="fill" className="text-stone-700" />
         Restaurant Analytics
       </h2>
-      
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {statsData.map((stat, index) => (
@@ -119,7 +127,13 @@ export default function Analytics() {
               ) : (
                 <TrendDown size={16} className="text-red-600 mr-1" />
               )}
-              <span className={stat.isPositive ? "text-green-600 text-sm" : "text-red-600 text-sm"}>
+              <span
+                className={
+                  stat.isPositive
+                    ? "text-green-600 text-sm"
+                    : "text-red-600 text-sm"
+                }
+              >
                 {stat.change}
               </span>
               <span className="text-stone-600 text-sm ml-1">vs last month</span>
@@ -132,13 +146,17 @@ export default function Analytics() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Revenue Trend */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-lg font-medium text-stone-800 mb-4">Revenue Trend</h3>
+          <h3 className="text-lg font-medium text-stone-800 mb-4">
+            Revenue Trend
+          </h3>
           <LineChartPlaceholder />
         </div>
 
         {/* Customer Traffic */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-lg font-medium text-stone-800 mb-4">Customer Traffic</h3>
+          <h3 className="text-lg font-medium text-stone-800 mb-4">
+            Customer Traffic
+          </h3>
           <BarChartPlaceholder />
         </div>
       </div>
@@ -147,22 +165,35 @@ export default function Analytics() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Top Selling Items */}
         <div className="md:col-span-2 bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-lg font-medium text-stone-800 mb-4">Top Selling Items</h3>
+          <h3 className="text-lg font-medium text-stone-800 mb-4">
+            Top Selling Items
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full min-w-full">
               <thead>
                 <tr className="border-b border-stone-100">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Item</th>
-                  <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">Quantity</th>
-                  <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">Revenue</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                    Item
+                  </th>
+                  <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">
+                    Quantity
+                  </th>
+                  <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">
+                    Revenue
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {topSellingItems.map((item) => (
-                  <tr key={item.id} className="border-b border-stone-100 last:border-b-0">
+                  <tr
+                    key={item.id}
+                    className="border-b border-stone-100 last:border-b-0"
+                  >
                     <td className="py-3 px-4">{item.name}</td>
                     <td className="py-3 px-4 text-right">{item.quantity}</td>
-                    <td className="py-3 px-4 text-right font-medium">{item.revenue}</td>
+                    <td className="py-3 px-4 text-right font-medium">
+                      {item.revenue}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -172,7 +203,9 @@ export default function Analytics() {
 
         {/* Sales Breakdown */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-lg font-medium text-stone-800 mb-4">Sales Breakdown</h3>
+          <h3 className="text-lg font-medium text-stone-800 mb-4">
+            Sales Breakdown
+          </h3>
           <PieChartPlaceholder />
           <div className="mt-4 space-y-2">
             <div className="flex justify-between items-center">

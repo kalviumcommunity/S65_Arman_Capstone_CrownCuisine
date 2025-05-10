@@ -50,9 +50,7 @@ const tabGroups = [
   },
   {
     heading: "Offers",
-    tabs: [
-      { id: "offers", label: "Saved Offers", icon: Ticket },
-    ],
+    tabs: [{ id: "offers", label: "Saved Offers", icon: Ticket }],
   },
   {
     heading: "Account",
@@ -70,7 +68,10 @@ export default function CustomerDashboard() {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef(null);
 
-  const initialCollapsed = tabGroups.reduce((acc, grp) => ((acc[grp.heading] = false), acc), {});
+  const initialCollapsed = tabGroups.reduce(
+    (acc, grp) => ((acc[grp.heading] = false), acc),
+    {},
+  );
   const [collapsedGroups, setCollapsedGroups] = useState(initialCollapsed);
 
   const ActiveComponent = {
@@ -192,7 +193,7 @@ export default function CustomerDashboard() {
 
       <main className="flex-1 overflow-y-auto bg-stone-800">
         <div className="p-3">
-          <div className="bg-stone-300 rounded-lg p-6">
+          <div className="bg-stone-200 rounded-lg p-6">
             <ActiveComponent />
           </div>
         </div>

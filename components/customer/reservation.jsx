@@ -38,19 +38,30 @@ export default function Reservations() {
   return (
     <div className="p-4 bg-white shadow-md rounded-lg space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-3">Your Upcoming Reservations</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-3">
+          Your Upcoming Reservations
+        </h2>
         {currentReservations.length > 0 ? (
           <div className="space-y-3">
             {currentReservations.map((res) => (
-              <div key={res.id} className="p-3 border border-gray-200 rounded-md bg-blue-50">
+              <div
+                key={res.id}
+                className="p-3 border border-gray-200 rounded-md bg-blue-50"
+              >
                 <h3 className="font-medium text-blue-700">{res.restaurant}</h3>
                 <p className="text-sm text-blue-600">
                   Date: {res.date} at {res.time}
                 </p>
-                <p className="text-sm text-blue-600">Party Size: {res.partySize}</p>
+                <p className="text-sm text-blue-600">
+                  Party Size: {res.partySize}
+                </p>
                 <div className="mt-2 space-x-2">
-                    <button className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">Modify</button>
-                    <button className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">Cancel</button>
+                  <button className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Modify
+                  </button>
+                  <button className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
+                    Cancel
+                  </button>
                 </div>
               </div>
             ))}
@@ -61,17 +72,29 @@ export default function Reservations() {
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-3">Previous Reservations</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-3">
+          Previous Reservations
+        </h2>
         {previousReservations.length > 0 ? (
           <div className="space-y-3">
             {previousReservations.map((res) => (
-              <div key={res.id} className="p-3 border border-gray-200 rounded-md bg-gray-50">
+              <div
+                key={res.id}
+                className="p-3 border border-gray-200 rounded-md bg-gray-50"
+              >
                 <h3 className="font-medium text-gray-700">{res.restaurant}</h3>
                 <p className="text-sm text-gray-600">
                   Date: {res.date} at {res.time}
                 </p>
-                <p className="text-sm text-gray-600">Party Size: {res.partySize}</p>
-                <p className="text-sm text-gray-600">Status: <span className="font-semibold text-green-600">{res.status}</span></p>
+                <p className="text-sm text-gray-600">
+                  Party Size: {res.partySize}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Status:{" "}
+                  <span className="font-semibold text-green-600">
+                    {res.status}
+                  </span>
+                </p>
               </div>
             ))}
           </div>

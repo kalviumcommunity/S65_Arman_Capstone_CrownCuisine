@@ -13,7 +13,7 @@ export default function ManagerProfile() {
     role: "Restaurant Manager",
     joinDate: "May 15, 2020",
     address: "123 Culinary Street, Gourmet City, GC 12345",
-    bio: "Restaurant management professional with over 8 years of experience in fine dining establishments. Specialized in team leadership and customer satisfaction."
+    bio: "Restaurant management professional with over 8 years of experience in fine dining establishments. Specialized in team leadership and customer satisfaction.",
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -45,7 +45,9 @@ export default function ManagerProfile() {
       <div className="pt-16 pb-8 px-8">
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h2 className={`${instrumentSerif.className} text-2xl font-medium text-stone-800`}>
+            <h2
+              className={`${instrumentSerif.className} text-2xl font-medium text-stone-800`}
+            >
               {profileData.name}
             </h2>
             <p className="text-stone-500">{profileData.role}</p>
@@ -63,7 +65,12 @@ export default function ManagerProfile() {
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-stone-700 mb-1">Name</label>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -74,7 +81,12 @@ export default function ManagerProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -85,7 +97,12 @@ export default function ManagerProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-stone-700 mb-1">Phone</label>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Phone
+                </label>
                 <input
                   type="tel"
                   name="phone"
@@ -96,7 +113,12 @@ export default function ManagerProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-stone-700 mb-1">Role</label>
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Role
+                </label>
                 <input
                   type="text"
                   name="role"
@@ -107,7 +129,12 @@ export default function ManagerProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-stone-700 mb-1">Address</label>
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Address
+                </label>
                 <input
                   type="text"
                   name="address"
@@ -118,7 +145,12 @@ export default function ManagerProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="joinDate" className="block text-sm font-medium text-stone-700 mb-1">Join Date</label>
+                <label
+                  htmlFor="joinDate"
+                  className="block text-sm font-medium text-stone-700 mb-1"
+                >
+                  Join Date
+                </label>
                 <input
                   type="text"
                   name="joinDate"
@@ -130,7 +162,12 @@ export default function ManagerProfile() {
               </div>
             </div>
             <div className="mb-6">
-              <label htmlFor="bio" className="block text-sm font-medium text-stone-700 mb-1">Bio</label>
+              <label
+                htmlFor="bio"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
+                Bio
+              </label>
               <textarea
                 name="bio"
                 id="bio"
@@ -158,11 +195,15 @@ export default function ManagerProfile() {
               <p className="text-stone-900">{profileData.phone}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-stone-500 mb-1">Address</h3>
+              <h3 className="text-sm font-medium text-stone-500 mb-1">
+                Address
+              </h3>
               <p className="text-stone-900">{profileData.address}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-stone-500 mb-1">Start Date</h3>
+              <h3 className="text-sm font-medium text-stone-500 mb-1">
+                Start Date
+              </h3>
               <p className="text-stone-900">{profileData.joinDate}</p>
             </div>
             <div className="col-span-2">

@@ -21,17 +21,24 @@ export default function Settings() {
       <p className="text-gray-600 mt-2">Manage your preferences.</p>
 
       <div className="mt-6">
-        <h3 className="text-lg font-medium text-gray-700 mb-2">Notification Preferences</h3>
+        <h3 className="text-lg font-medium text-gray-700 mb-2">
+          Notification Preferences
+        </h3>
         <div className="space-y-2">
           {Object.keys(notifications).map((key) => (
-            <label key={key} className="flex items-center space-x-2 cursor-pointer">
+            <label
+              key={key}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
               <input
                 type="checkbox"
                 checked={notifications[key]}
                 onChange={() => handleNotificationChange(key)}
                 className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
               />
-              <span className="text-gray-700 text-sm capitalize">{key} Notifications</span>
+              <span className="text-gray-700 text-sm capitalize">
+                {key} Notifications
+              </span>
             </label>
           ))}
         </div>

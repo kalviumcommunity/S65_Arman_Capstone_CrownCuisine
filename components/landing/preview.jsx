@@ -1,170 +1,179 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Package, User, Hamburger, CalendarCheck, GearSix, MagnifyingGlass } from "@phosphor-icons/react";
-import { instrumentSerif } from "@/app/fonts";
+import React, { useState, useRef, useEffect, Fragment } from "react";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  MagnifyingGlass,
+  CalendarPlus,
+  ClockCounterClockwise,
+  Heart,
+  Star,
+  Ticket,
+  User,
+  GearSix,
+  Question,
+  CaretDown,
+  HouseSimple,
+} from "@phosphor-icons/react";
+import { funnelSans, instrumentSerif } from "@/app/fonts";
+import { Separator } from "@/components/ui/separator";
 
-// Sample data from components/manager/Staff.jsx
-const staffMembers = [
-  { 
-    id: 1, 
-    name: "Rohan Kapoor", 
-    position: "Tandoor Chef", 
-    email: "rohan@crowncuisine.com", 
-    phone: "(+91) 98765 43210", 
-    status: "Active" 
+// Import customer components
+import Overview from "@/components/customer/overview";
+import Search from "@/components/customer/search";
+import Reservations from "@/components/customer/reservation";
+import Favorites from "@/components/customer/favourite";
+import Offers from "@/components/customer/offer";
+import Profile from "@/components/customer/account";
+import Settings from "@/components/customer/setting";
+import Questions from "@/components/customer/questions";
+import Popular from "@/components/customer/popular";
+
+const tabGroups = [
+  {
+    heading: "Explore",
+    tabs: [
+      { id: "overview", label: "Overview", icon: HouseSimple },
+      { id: "search", label: "Search Restaurants", icon: MagnifyingGlass },
+      { id: "popular", label: "Popular Ones", icon: Star },
+    ],
   },
-  { 
-    id: 2, 
-    name: "Deepika Sharma", 
-    position: "Curry Chef", 
-    email: "deepika@crowncuisine.com", 
-    phone: "(+91) 91234 56789", 
-    status: "Active" 
+  {
+    heading: "Reservations",
+    tabs: [
+      { id: "reservation", label: "Your Reservations", icon: CalendarPlus },
+      { id: "previous", label: "Previous Ones", icon: ClockCounterClockwise },
+    ],
   },
-  { 
-    id: 3, 
-    name: "Arjun Patel", 
-    position: "Sweets Specialist", 
-    email: "arjun@crowncuisine.com", 
-    phone: "(+91) 99887 76655", 
-    status: "On Leave" 
+  {
+    heading: "Favorites",
+    tabs: [
+      { id: "restaurants", label: "Restaurants", icon: Heart },
+      { id: "menus", label: "Favourite Menus", icon: Star },
+    ],
   },
-];
-
-// Simplified components for preview
-const StaffComponent = () => (
-  <div>
-    <div className="flex justify-between items-center mb-6">
-      <div className="flex gap-4">
-        <div className="relative">
-          <MagnifyingGlass size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400" />
-          <input 
-            type="text" 
-            placeholder="Search employee..." 
-            className="pl-9 pr-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-stone-500"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {staffMembers.map((staff) => (
-        <div key={staff.id} className="bg-stone-50 rounded-lg border border-stone-200 p-4 flex items-start gap-4">
-          <div className="bg-stone-200 rounded-full w-12 h-12 flex items-center justify-center text-stone-600 font-medium">
-            {staff.name.split(' ').map(n => n[0]).join('')}
-          </div>
-          <div className="flex-1">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-medium text-stone-900">{staff.name}</h3>
-                <p className="text-stone-600 text-sm">{staff.position}</p>
-              </div>
-              <span 
-                className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                  staff.status === "Active" 
-                    ? "bg-green-100 text-green-800" 
-                    : "bg-amber-100 text-amber-800"
-                }`}
-              >
-                {staff.status}
-              </span>
-            </div>
-            <div className="mt-2 text-sm">
-              <p className="text-stone-500">{staff.email}</p>
-              <p className="text-stone-500">{staff.phone}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-const PlaceholderComponent = ({ name }) => (
-  <div className="flex items-center justify-center h-64">
-    <p className="text-stone-500">{name} Component Placeholder</p>
-  </div>
-);
-
-const tabs = [
-  { id: "inventory", label: "Inventory", icon: Package },
-  { id: "staff", label: "Staff", icon: User },
-  { id: "menu", label: "Menu", icon: Hamburger },
-  { id: "reservations", label: "Table Reservations", icon: CalendarCheck },
-  { id: "settings", label: "Settings", icon: GearSix },
+  {
+    heading: "Offers",
+    tabs: [{ id: "offers", label: "Saved Offers", icon: Ticket }],
+  },
+  {
+    heading: "Account",
+    tabs: [
+      { id: "settings", label: "Settings", icon: GearSix },
+      { id: "profile", label: "Your Account", icon: User },
+      { id: "questions", label: "Got Questions?", icon: Question },
+    ],
+  },
 ];
 
 const Preview = () => {
-  const [activeTab, setActiveTab] = useState("staff");
-  const [sidebarWidth, setSidebarWidth] = useState(180);
+  const [activeTab, setActiveTab] = useState("overview");
+  const [sidebarWidth, setSidebarWidth] = useState(200);
   const containerRef = useRef(null);
 
+  const initialCollapsed = tabGroups.reduce(
+    (acc, grp) => ((acc[grp.heading] = false), acc),
+    {},
+  );
+  const [collapsedGroups, setCollapsedGroups] = useState(initialCollapsed);
+
   const ActiveComponent = {
-    inventory: () => <PlaceholderComponent name="Inventory" />,
-    staff: StaffComponent,
-    menu: () => <PlaceholderComponent name="Menu" />,
-    reservations: () => <PlaceholderComponent name="Table Reservations" />,
-    settings: () => <PlaceholderComponent name="Settings" />,
+    overview: Overview,
+    search: Search,
+    popular: Popular,
+    reservation: Reservations,
+    previous: Reservations,
+    restaurants: Favorites,
+    menus: Favorites,
+    offers: Offers,
+    profile: Profile,
+    settings: Settings,
+    questions: Questions,
   }[activeTab];
+
+  const toggleGroup = (heading) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [heading]: !prev[heading],
+    }));
+  };
 
   return (
     <div className="w-full" ref={containerRef}>
       {/* 16:9 aspect ratio container */}
-      <div className="w-full relative" style={{ paddingBottom: "56.25%" }}>
-        <div className="absolute inset-0 overflow-hidden rounded-xl border border-stone-300 shadow-lg">
+      <div className="w-full relative" style={{ paddingBottom: "60%" }}>
+        <div className="absolute inset-0 overflow-hidden rounded-lg border border-stone-300 shadow-lg">
           <div className="flex h-full w-full">
             {/* Sidebar */}
-            <aside className="bg-stone-800 text-stone-100 relative flex flex-col"
-              style={{ width: `${sidebarWidth}px`, minWidth: `${sidebarWidth}px` }}>
-              <div className="flex justify-center p-6">
-                <h1 className={`${instrumentSerif.className} text-lg mt-2 mb-2 text-stone-100 text-center`}>
+            <aside
+              className="bg-stone-800 text-stone-100 flex flex-col relative"
+              style={{
+                width: `${sidebarWidth}px`,
+                minWidth: `${sidebarWidth}px`,
+              }}
+            >
+              <div className="p-6 flex justify-center mt-2">
+                <h1 className={`${instrumentSerif.className} text-2xl`}>
                   Crown <em className="italic">Cuisine</em>
                 </h1>
               </div>
 
-              <nav className="flex flex-col w-full items-center">
-                <TooltipProvider>
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon;
-                    const isActive = activeTab === tab.id;
-                    const buttonWidth = sidebarWidth - 32; // Full width minus padding
-                    
-                    return (
-                      <Tooltip key={tab.id}>
-                        <TooltipTrigger asChild>
-                          <button
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center justify-center mb-4 bg-stone-900 transition-all cursor-pointer ${
-                              isActive
-                                ? "bg-stone-950 text-stone-100"
-                                : "text-stone-100 hover:bg-stone-900/50"
-                            } rounded-lg`}
-                            style={{ width: `${buttonWidth}px`, height: '70px' }}
-                          >
-                            <Icon size={20} weight="regular" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          <p>{tab.label}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
-                </TooltipProvider>
+              <nav className="flex-1 overflow-y-auto px-4">
+                {tabGroups.map((group, idx) => (
+                  <Fragment key={group.heading}>
+                    <button
+                      onClick={() => toggleGroup(group.heading)}
+                      className="w-full flex items-center justify-between mt-4 mb-2 px-2 text-xs text-stone-400 uppercase hover:text-stone-300 transition-colors cursor-pointer"
+                    >
+                      <span>{group.heading}</span>
+                      <CaretDown
+                        size={12}
+                        weight="bold"
+                        className={`transition-transform duration-200 ${
+                          collapsedGroups[group.heading]
+                            ? "-rotate-90"
+                            : "rotate-0"
+                        }`}
+                      />
+                    </button>
+
+                    {!collapsedGroups[group.heading] && (
+                      <div>
+                        {group.tabs.map((tab) => {
+                          const Icon = tab.icon;
+                          const isActive = activeTab === tab.id;
+                          return (
+                            <button
+                              key={tab.id}
+                              onClick={() => setActiveTab(tab.id)}
+                              className={`flex items-center w-full px-4 py-3 mb-1 rounded-full transition-colors cursor-pointer ${
+                                isActive
+                                  ? "bg-stone-900 text-stone-100"
+                                  : "hover:bg-stone-900/50 text-stone-100"
+                              }`}
+                              title={tab.label}
+                            >
+                              <Icon size={16} className="mr-2 flex-shrink-0" />
+                              <span className="text-xs truncate">
+                                {tab.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {idx < tabGroups.length - 1 && (
+                      <Separator className="my-4 bg-stone-700" />
+                    )}
+                  </Fragment>
+                ))}
               </nav>
             </aside>
 
             {/* Main content area */}
-            <main className="flex-1 overflow-y-auto bg-stone-400">
-              <div className="p-6">
-                <div className="bg-stone-100 rounded-xl shadow-sm p-6">
+            <main className="flex-1 overflow-y-auto bg-stone-800">
+              <div className="p-3">
+                <div className="bg-stone-200 rounded-lg p-6">
                   <ActiveComponent />
                 </div>
               </div>

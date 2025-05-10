@@ -40,9 +40,9 @@ export default function Hero() {
             </span>
           </h1>
           <p className="max-w-lg mx-auto text-md mb-6 text-stone-800">
-            Manage orders, reservations, staff, and inventory all in one
-            place. Get real-time insights to boost efficiency and deliver
-            great service.
+            Manage orders, reservations, staff, and inventory all in one place.
+            Get real-time insights to boost efficiency and deliver great
+            service.
           </p>
           <div className="flex gap-4 justify-center">
             <Button
@@ -61,11 +61,6 @@ export default function Hero() {
             </Button>
           </div>
         </motion.div>
-      </section>
-
-      {/* Demo Visual Section */}
-      <section className="w-full max-w-6xl px-8 mt-12">
-        <Preview />
       </section>
 
       <WelcomeSetupModal

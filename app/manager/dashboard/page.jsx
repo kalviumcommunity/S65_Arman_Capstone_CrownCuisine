@@ -17,7 +17,7 @@ import {
   User,
   UserCheck,
   CaretDown,
-  Question
+  Question,
 } from "@phosphor-icons/react";
 import { funnelSans, instrumentSerif } from "@/app/fonts";
 import { Separator } from "@/components/ui/separator";
@@ -71,9 +71,7 @@ export default function ManagerDashboard() {
     acc[group.heading] = true;
     return acc;
   }, {});
-  const [collapsedGroups, setCollapsedGroups] = useState(
-    initialCollapsedState,
-  );
+  const [collapsedGroups, setCollapsedGroups] = useState(initialCollapsedState);
 
   const ActiveComponent = {
     overview: () => <div>Overview Dashboard</div>,
@@ -154,9 +152,7 @@ export default function ManagerDashboard() {
                   size={12}
                   weight="bold"
                   className={`transition-transform duration-200 ${
-                    collapsedGroups[group.heading]
-                      ? "-rotate-90"
-                      : "rotate-0"
+                    collapsedGroups[group.heading] ? "-rotate-90" : "rotate-0"
                   }`}
                 />
               </button>
@@ -171,16 +167,14 @@ export default function ManagerDashboard() {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center w-full px-4 py-3 mb-1 rounded-full transition-colors cursor-pointer ${
-                            isActive
-                              ? "bg-stone-900 text-stone-100"
-                              : "hover:bg-stone-900/50 text-stone-100"
-                          }`}
+                          isActive
+                            ? "bg-stone-900 text-stone-100"
+                            : "hover:bg-stone-900/50 text-stone-100"
+                        }`}
                         title={tab.label}
                       >
                         <Icon size={16} className="mr-2 flex-shrink-0" />
-                        <span className="text-xs truncate">
-                          {tab.label}
-                        </span>
+                        <span className="text-xs truncate">{tab.label}</span>
                       </button>
                     );
                   })}

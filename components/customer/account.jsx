@@ -39,7 +39,12 @@ export default function Profile() {
       {isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
             <input
               type="text"
               name="name"
@@ -50,7 +55,12 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -61,7 +71,12 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Phone
+            </label>
             <input
               type="tel"
               name="phone"
@@ -72,7 +87,12 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Address
+            </label>
             <textarea
               name="address"
               id="address"
@@ -91,10 +111,19 @@ export default function Profile() {
         </form>
       ) : (
         <div className="space-y-3">
-          <p className="text-gray-700"><strong className="font-medium">Name:</strong> {profileData.name}</p>
-          <p className="text-gray-700"><strong className="font-medium">Email:</strong> {profileData.email}</p>
-          <p className="text-gray-700"><strong className="font-medium">Phone:</strong> {profileData.phone}</p>
-          <p className="text-gray-700"><strong className="font-medium">Address:</strong> {profileData.address}</p>
+          <p className="text-gray-700">
+            <strong className="font-medium">Name:</strong> {profileData.name}
+          </p>
+          <p className="text-gray-700">
+            <strong className="font-medium">Email:</strong> {profileData.email}
+          </p>
+          <p className="text-gray-700">
+            <strong className="font-medium">Phone:</strong> {profileData.phone}
+          </p>
+          <p className="text-gray-700">
+            <strong className="font-medium">Address:</strong>{" "}
+            {profileData.address}
+          </p>
         </div>
       )}
     </div>

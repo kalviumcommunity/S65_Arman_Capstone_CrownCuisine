@@ -7,17 +7,20 @@ const faqs = [
   {
     id: 1,
     question: "How do I make a reservation?",
-    answer: "You can make a reservation through the 'Your Reservations' tab by selecting a restaurant, date, and time.",
+    answer:
+      "You can make a reservation through the 'Your Reservations' tab by selecting a restaurant, date, and time.",
   },
   {
     id: 2,
     question: "Can I cancel a reservation?",
-    answer: "Yes, you can cancel a reservation up to 24 hours before the scheduled time. Go to 'Your Reservations' and select the reservation to cancel.",
+    answer:
+      "Yes, you can cancel a reservation up to 24 hours before the scheduled time. Go to 'Your Reservations' and select the reservation to cancel.",
   },
   {
     id: 3,
     question: "How do I update my profile?",
-    answer: "You can update your profile information in the 'Your Account' tab.",
+    answer:
+      "You can update your profile information in the 'Your Account' tab.",
   },
 ];
 
@@ -30,8 +33,12 @@ export default function Questions() {
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold text-gray-800">Got Questions? (FAQ)</h2>
-      <p className="text-gray-600 mt-2">Find answers to common questions below.</p>
+      <h2 className="text-xl font-semibold text-gray-800">
+        Got Questions? (FAQ)
+      </h2>
+      <p className="text-gray-600 mt-2">
+        Find answers to common questions below.
+      </p>
       <div className="mt-4 space-y-3">
         {faqs.map((faq) => (
           <div key={faq.id} className="border border-gray-200 rounded-md">

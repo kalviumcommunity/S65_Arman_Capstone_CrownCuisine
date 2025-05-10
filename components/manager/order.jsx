@@ -93,13 +93,16 @@ export default function OrderManagement() {
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter orders based on selected status
-  const filteredOrders = activeStatus === "All"
-    ? orders
-    : orders.filter(order => order.status === activeStatus);
+  const filteredOrders =
+    activeStatus === "All"
+      ? orders
+      : orders.filter((order) => order.status === activeStatus);
 
   return (
     <div>
-      <h2 className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}>
+      <h2
+        className={`${instrumentSerif.className} text-2xl font-medium flex items-center gap-2 mb-8`}
+      >
         <CookingPot size={24} weight="fill" className="text-stone-700" />
         Order Management
       </h2>
@@ -124,20 +127,26 @@ export default function OrderManagement() {
 
         <div className="flex gap-2">
           <div className="relative">
-            <MagnifyingGlass size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400" />
-            <input 
-              type="text" 
-              placeholder="Search orders..." 
+            <MagnifyingGlass
+              size={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
+            />
+            <input
+              type="text"
+              placeholder="Search orders..."
               className="pl-9 pr-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-stone-500"
             />
           </div>
-          <button 
+          <button
             onClick={() => setShowFilters(!showFilters)}
             className="px-3 py-2 bg-stone-100 text-stone-700 rounded-lg hover:bg-stone-200 flex items-center gap-1"
           >
             <SlidersHorizontal size={16} />
             <span className="text-sm">Filters</span>
-            <CaretDown size={12} className={`transition-transform ${showFilters ? "rotate-180" : ""}`} />
+            <CaretDown
+              size={12}
+              className={`transition-transform ${showFilters ? "rotate-180" : ""}`}
+            />
           </button>
         </div>
       </div>
@@ -147,7 +156,9 @@ export default function OrderManagement() {
         <div className="bg-stone-50 p-4 rounded-lg mb-6 border border-stone-200">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-medium text-stone-700 mb-1">Payment Method</label>
+              <label className="block text-xs font-medium text-stone-700 mb-1">
+                Payment Method
+              </label>
               <select className="w-full p-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500">
                 <option>All</option>
                 <option>Card</option>
@@ -156,7 +167,9 @@ export default function OrderManagement() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-700 mb-1">Date Range</label>
+              <label className="block text-xs font-medium text-stone-700 mb-1">
+                Date Range
+              </label>
               <select className="w-full p-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500">
                 <option>Today</option>
                 <option>Yesterday</option>
@@ -165,7 +178,9 @@ export default function OrderManagement() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-700 mb-1">Table</label>
+              <label className="block text-xs font-medium text-stone-700 mb-1">
+                Table
+              </label>
               <select className="w-full p-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500">
                 <option>All Tables</option>
                 <option>A Section</option>
@@ -175,7 +190,9 @@ export default function OrderManagement() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-700 mb-1">Order Amount</label>
+              <label className="block text-xs font-medium text-stone-700 mb-1">
+                Order Amount
+              </label>
               <select className="w-full p-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500">
                 <option>Any</option>
                 <option>Under $25</option>
@@ -199,27 +216,53 @@ export default function OrderManagement() {
           <table className="w-full min-w-full">
             <thead>
               <tr className="bg-stone-50 border-b border-stone-200">
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Order ID</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Customer</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Items</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Table</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Time</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Total</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">Status</th>
-                <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">Actions</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Order ID
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Customer
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Items
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Table
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Time
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Total
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-stone-600">
+                  Status
+                </th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-stone-600">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredOrders.map((order) => (
-                <tr key={order.id} className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50">
-                  <td className="py-4 px-4 font-medium text-stone-800">{order.id}</td>
+                <tr
+                  key={order.id}
+                  className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50"
+                >
+                  <td className="py-4 px-4 font-medium text-stone-800">
+                    {order.id}
+                  </td>
                   <td className="py-4 px-4">{order.customer}</td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col">
                       {order.items.map((item, idx) => (
                         <div key={idx} className="flex items-center text-sm">
-                          <ForkKnife size={12} className="text-stone-400 mr-1" />
-                          <span>{item.quantity}x {item.name}</span>
+                          <ForkKnife
+                            size={12}
+                            className="text-stone-400 mr-1"
+                          />
+                          <span>
+                            {item.quantity}x {item.name}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -233,14 +276,16 @@ export default function OrderManagement() {
                   </td>
                   <td className="py-4 px-4 font-medium">{order.total}</td>
                   <td className="py-4 px-4">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-                      ${order.status === 'In Progress' 
-                        ? 'bg-amber-100 text-amber-800'
-                        : order.status === 'Ready'
-                        ? 'bg-blue-100 text-blue-800'
-                        : order.status === 'Completed'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                    <span
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                      ${
+                        order.status === "In Progress"
+                          ? "bg-amber-100 text-amber-800"
+                          : order.status === "Ready"
+                            ? "bg-blue-100 text-blue-800"
+                            : order.status === "Completed"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
                       }`}
                     >
                       {order.status}
@@ -248,18 +293,28 @@ export default function OrderManagement() {
                   </td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex justify-end gap-2">
-                      {order.status === 'In Progress' && (
-                        <button className="p-1 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200" title="Mark as Ready">
+                      {order.status === "In Progress" && (
+                        <button
+                          className="p-1 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200"
+                          title="Mark as Ready"
+                        >
                           <CheckCircle size={18} />
                         </button>
                       )}
-                      {(order.status === 'In Progress' || order.status === 'Ready') && (
-                        <button className="p-1 rounded-full bg-red-100 text-red-700 hover:bg-red-200" title="Cancel Order">
+                      {(order.status === "In Progress" ||
+                        order.status === "Ready") && (
+                        <button
+                          className="p-1 rounded-full bg-red-100 text-red-700 hover:bg-red-200"
+                          title="Cancel Order"
+                        >
                           <XCircle size={18} />
                         </button>
                       )}
-                      {order.status === 'Ready' && (
-                        <button className="p-1 rounded-full bg-green-100 text-green-700 hover:bg-green-200" title="Mark as Completed">
+                      {order.status === "Ready" && (
+                        <button
+                          className="p-1 rounded-full bg-green-100 text-green-700 hover:bg-green-200"
+                          title="Mark as Completed"
+                        >
                           <CheckCircle size={18} />
                         </button>
                       )}
