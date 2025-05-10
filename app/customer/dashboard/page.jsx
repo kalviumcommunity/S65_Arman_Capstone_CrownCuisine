@@ -50,7 +50,10 @@ const tabGroups = [
   },
   {
     heading: "Offers",
-    tabs: [{ id: "offers", label: "Saved Offers", icon: Ticket }],
+    tabs: [
+      { id: "offers", label: "Saved Offers", icon: Ticket },
+      { id: "expiring", label: "Expiring Soon", icon: Ticket },
+    ],
   },
   {
     heading: "Account",
